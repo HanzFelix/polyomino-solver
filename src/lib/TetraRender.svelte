@@ -7,17 +7,19 @@
 	let tetraSVG;
 
 	onMount(() => {
-		let gap = 3;
+		let shapeWidth = shape[0].length;
+		let shapeHeight = shape.length;
+		grid = Math.max(shapeHeight, shapeWidth) < grid ? grid : Math.max(shapeHeight, shapeWidth);
+
+		let gap = grid < 6 ? 3 : 1;
 		let pad = 3;
 		let squareSize = (100 - (grid + 1) * gap - pad * 2) / grid; // 8 + 30
-		let pieceWidth = shape[0].length;
-		let pieceHeight = shape.length;
 
 		const xOffset =
-			gap * ((grid - pieceWidth) / 2 + 1) + squareSize * ((grid - pieceWidth) / 2) + pad;
+			gap * ((grid - shapeWidth) / 2 + 1) + squareSize * ((grid - shapeWidth) / 2) + pad;
 		const yOffset =
-			gap * ((grid - pieceHeight) / 2 + 1) + squareSize * ((grid - pieceHeight) / 2) + pad;
-		const pieceGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+			gap * ((grid - shapeHeight) / 2 + 1) + squareSize * ((grid - shapeHeight) / 2) + pad;
+		const shapeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 		shape.forEach((row, rowIndex) => {
 			row.forEach((cell, colIndex) => {
 				const square = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -26,12 +28,12 @@
 				square.setAttribute('width', `${squareSize}%`);
 				square.setAttribute('height', `${squareSize}%`);
 				square.setAttribute('rx', '3%');
-				square.style.fill = $tetracolors[cell]; /*cell != 0 ? piece.color : emptyColor*/ // Set the color
-				pieceGroup.appendChild(square);
+				square.style.fill = $tetracolors[cell]; /*cell != 0 ? shape.color : emptyColor*/ // Set the color
+				shapeGroup.appendChild(square);
 			});
 		});
 
-		tetraSVG.appendChild(pieceGroup);
+		tetraSVG.appendChild(shapeGroup);
 	});
 </script>
 
