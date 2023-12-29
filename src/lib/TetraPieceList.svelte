@@ -12,11 +12,22 @@
 			<input
 				type="text"
 				name={'piece' + piece.id}
-				placeholder="0"
-				inputmode="numeric"
-				pattern="\\d*"
 				size="1"
-				class="px-2 basis-full bg-tbrown-50 rounded-md text-center"
+				on:focusin={() => {
+					if (piece.quantity == 0) {
+						piece.quantity = '';
+					}
+				}}
+				on:focusout={() => {
+					if (piece.quantity == '') {
+						piece.quantity = 0;
+					}
+				}}
+				placeholder="0"
+				bind:value={piece.quantity}
+				class="px-2 basis-full bg-tbrown-50 rounded-md text-center {piece.quantity <= 0
+					? 'text-tbrown-500'
+					: 'text-tbrown-900'}"
 			/>
 		</div>
 	{/each}
