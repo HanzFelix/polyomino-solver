@@ -10,7 +10,7 @@ export function createTetraSolutionStore(initial) {
 		};
 	});
 
-	const { subscribe, update } = writable(tetrasolutions);
+	const { subscribe, update, set } = writable(tetrasolutions);
 
 	return {
 		subscribe,
@@ -24,6 +24,7 @@ export function createTetraSolutionStore(initial) {
 		},
 		remove: (tetrasolution) => {
 			update(($tetrasolutions) => $tetrasolutions.filter((t) => t !== tetrasolution));
-		}
+		},
+		reset: () => set([])
 	};
 }
