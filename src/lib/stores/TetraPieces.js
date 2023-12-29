@@ -6,7 +6,9 @@ export function createTetraPieceStore(initial) {
 	const tetrapieces = initial.map((shape) => {
 		return {
 			id: uid++,
-			shape
+			shape,
+			quantity: 0,
+			weight: shape.reduce((count, row) => count + row.filter((x) => x !== 0).length, 0)
 		};
 	});
 
@@ -17,7 +19,9 @@ export function createTetraPieceStore(initial) {
 		add: (shape) => {
 			const tetrapiece = {
 				id: uid++,
-				shape
+				shape,
+				quantity: 0,
+				weight: shape.reduce((count, row) => count + row.filter((x) => x !== 0).length, 0)
 			};
 
 			update(($tetrapieces) => [...$tetrapieces, tetrapiece]);
