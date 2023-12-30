@@ -1,8 +1,19 @@
 onmessage = (event) => {
-	const { pieceWeights, maxWeight } = event.data;
-	generatePieceCombos(pieceWeights, maxWeight);
+	const { pieces, maxWeight } = event.data;
+	generatePieceCombos(tallyPieceWeights(pieces), maxWeight);
 	postMessage({ state: 'done', combo: [] });
 };
+
+//pieces stuff
+function tallyPieceWeights(pieces) {
+	const weights = [];
+	for (let i = 0; i < pieces.length; i++) {
+		for (let j = 0; j < pieces[i].quantity; j++) {
+			weights.push({ id: pieces[i].id, weight: pieces[i].weight });
+		}
+	}
+	return weights;
+}
 
 // search combinations from bag (via sum of piece weight == free_space)
 function generatePieceCombos(pieceWeights, maxWeight) {
