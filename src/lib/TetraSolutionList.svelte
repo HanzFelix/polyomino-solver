@@ -8,7 +8,7 @@
 >
 	{#each solutions as solution}
 		<div class="w-16 md:w-auto">
-			<TetraRender shape={solution.shape} grid={4} />
+			<TetraRender shape={solution} grid={4} />
 		</div>
 	{/each}
 </div>

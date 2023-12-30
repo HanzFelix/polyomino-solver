@@ -1,13 +1,11 @@
 <script>
 	import TetraPieceList from '$lib/TetraPieceList.svelte';
 	import comboWorkerUrl from '$lib/workers/TetraComboWorker?url';
-	import ValidWorkerUrl from '$lib/workers/TetraValidWorker?url';
-	import timerWorkerUrl from '$lib/workers/TimerWorker?url';
+	import validWorkerUrl from '$lib/workers/TetraValidWorker?url';
 	import TetraSolutionList from '$lib/TetraSolutionList.svelte';
 	import TetraBoard from '$lib/TetraBoard.svelte';
 	import { tetracolors } from '$lib/stores/TetraColors.js';
 	import { createTetraPieceStore } from '$lib/stores/TetraPieces.js';
-	import { createTetraSolutionStore } from '$lib/stores/TetraSolutions.js';
 	import { onMount, tick } from 'svelte';
 
 	tetracolors.init({
@@ -56,37 +54,25 @@
 		[[9]]
 	]);
 
-	const solutions = createTetraSolutionStore([]);
-
 	// board stuff
-	let rows = 4;
-	let cols = 4;
-	let in_rows = 4;
-	let in_cols = 4;
-	function updateBoardSize() {
-		rows = in_rows;
-		cols = in_cols;
-	}
+	let rows = 4,
+		cols = 4,
+		in_rows = 4,
+		in_cols = 4;
+
 	let blockedCells = [];
-	$: if (blockedCells.length != rows * cols) {
-		blockedCells = new Array(rows * cols).fill(false);
-	}
+
 	$: isCurrentDims = rows == in_rows && cols == in_cols;
 	$: hasBlocked = blockedCells.includes(true);
 
-	function clearBlocked() {
-		blockedCells = blockedCells.fill(false);
+	function updateBoardSize() {
+		rows = in_rows;
+		cols = in_cols;
+		blockedCells = new Array(rows * cols).fill(false);
 	}
 
-	//pieces stuff, move to comboworker? with param $pieces
-	function tallyPieceWeights() {
-		const weights = [];
-		for (let i = 0; i < $pieces.length; i++) {
-			for (let j = 0; j < $pieces[i].quantity; j++) {
-				weights.push({ id: $pieces[i].id, weight: $pieces[i].weight });
-			}
-		}
-		return weights;
+	function clearBlocked() {
+		blockedCells = blockedCells.fill(false);
 	}
 
 	// board translations stuff
@@ -116,22 +102,23 @@
 
 	// worker stuff
 	let finalBoard;
+	let readyCombos = [];
+	let validCombos = [];
 	function findSolutions() {
-		readyCombos = [];
-		solutions.reset();
-		finalBoard = boardifyBlocked();
-		comboWorker.postMessage({
-			pieceWeights: tallyPieceWeights(),
-			maxWeight: finalBoard.free_space
-		});
-		//timerWorker.postMessage(3000);
-	}
-
-	function terminateWorkers() {
-		comboWorker.terminate();
-		validWorker.terminate();
-		timerWorker.terminate();
-		workerStatus = 'Terminated';
+		if (workersDone) {
+			readyCombos = [];
+			validCombos = [];
+			busyValidationWorkers = 0;
+			finalBoard = boardifyBlocked();
+			comboWorkersDone = false;
+			comboWorker.postMessage({
+				pieces: $pieces,
+				maxWeight: finalBoard.free_space
+			});
+		} else {
+			comboWorker.terminate();
+			validWorker.terminate();
+		}
 	}
 
 	function updateQueue() {
@@ -143,64 +130,54 @@
 			});
 			busyValidationWorkers++;
 		}
-		// TODO: update to stop only when comboworker and validworker is done
-		if (readyCombos.length == 0 && busyValidationWorkers == 0) {
-			timerWorker.terminate();
-			workerStatus = 'Finished calculating';
-		}
 	}
 
-	let comboWorker, validWorker, timerWorker;
-	const maxValidationWorkers = 4;
+	let comboWorker, validWorker;
 	let busyValidationWorkers = 0;
-	let readyCombos = [];
-	let workerStatus = 'Ready';
+	let maxValidationWorkers = 4;
+	let comboWorkersDone = true;
+	$: validWorkersDone = busyValidationWorkers == 0;
+	$: workersDone = comboWorkersDone && validWorkersDone;
 
 	onMount(() => {
+		updateBoardSize();
 		comboWorker = new Worker(comboWorkerUrl);
 		comboWorker.onmessage = (event) => {
 			const { state, combo } = event.data;
 			if (state == 'found') {
 				readyCombos.push(combo);
 			} else {
-				console.log(state);
+				comboWorkersDone = true;
 			}
 			updateQueue();
-			tick();
+		};
+		comboWorker.onmessageerror = (event) => {
+			console.error(`Error receiving message from worker: ${event}`);
 		};
 
-		validWorker = new Worker(ValidWorkerUrl);
+		validWorker = new Worker(validWorkerUrl);
 		validWorker.onmessage = (event) => {
 			const { state, result } = event.data;
 			if (state == 'found') {
-				solutions.add(result);
-				//printBoard(result);
-				//console.log("===========");
+				validCombos = [...validCombos, result];
 			}
 			busyValidationWorkers--;
 			updateQueue();
-			tick();
 		};
-
-		timerWorker = new Worker(timerWorkerUrl);
-		timerWorker.onmessage = (event) => {
-			console.log(
-				'ready: ' +
-					readyCombos.length +
-					', working: ' +
-					busyValidationWorkers +
-					', found: ' +
-					$solutions.length
-			);
+		validWorker.onmessageerror = (event) => {
+			console.error(`Error receiving message from worker: ${event}`);
 		};
 	});
 	function tempAdd() {
-		solutions.add([
-			['X', 4, 4, 'X'],
-			[4, 4, 1, 1],
-			[3, 3, 1, 1],
-			['X', 3, 3, 'X']
-		]);
+		validCombos = [
+			...validCombos,
+			[
+				['X', 4, 4, 'X'],
+				[4, 4, 1, 1],
+				[3, 3, 1, 1],
+				['X', 3, 3, 'X']
+			]
+		];
 	}
 </script>
 
@@ -223,7 +200,7 @@
 							: 'bg-tcyan-900'} px-2 relative rounded-md flex overflow-hidden transition-colors"
 					>
 						<div id="size-apply" class="{isCurrentDims ? 'w-0' : ''} truncate py-1">
-							<button on:click={updateBoardSize}>Apply changes&nbsp;</button>
+							<button on:click={updateBoardSize}>Update&nbsp;</button>
 						</div>
 						<span class="font-bold py-1">&check;</span>
 					</div>
@@ -273,10 +250,10 @@
 						remove_selection
 					</button>
 				</div>
-				<div class="flex rounded-md overflow-hidden">
+				<div class="flex overflow-hidden">
 					<label
 						for="boardx"
-						class="py-1 px-2 text-tbrown-50 bg-tbrown-500 material-symbols-rounded"
+						class="py-2 px-2 text-tbrown-50 bg-tbrown-500 material-symbols-rounded rounded-l-md"
 					>
 						info
 					</label>
@@ -293,13 +270,17 @@
 				<TetraPieceList pieces={$pieces} />
 			</section>
 		</div>
-		<div class="flex rounded-b-md overflow-hidden">
-			<p class="bg-tbrown-500 py-2 px-4 text-tbrown-50 basis-full">{workerStatus}</p>
+		<div class="flex rounded-b-md">
+			<p class="bg-tbrown-500 py-2 px-4 text-tbrown-50 basis-full">
+				{workersDone ? 'Ready' : readyCombos.length + '->' + busyValidationWorkers}
+			</p>
 			<button
 				on:click={findSolutions}
-				class="bg-tcyan-900 font-black py-2 px-4 basis-36 text-left text-tbrown-50"
+				class="{workersDone
+					? 'bg-tcyan-900'
+					: 'bg-red-900'}  font-black py-2 px-4 basis-36 text-left text-tbrown-50"
 			>
-				START
+				{workersDone ? 'START' : 'ABORT'}
 			</button>
 		</div>
 	</div>
@@ -309,10 +290,10 @@
 		</div>
 		<div class="lg:basis-1/4 md:basis-1/3 flex flex-col min-w-48">
 			<div class="flex justify-between items-end gap-2 p-4 md:pl-2">
-				<h1 class="font-semibold">Solution{$solutions.length == 1 ? '' : 's'} Found:</h1>
-				<h1 id="count-el" class="text-5xl font-bold">{$solutions.length}</h1>
+				<h1 class="font-semibold w-min">Solution{validCombos.length == 1 ? '' : 's'} Found:</h1>
+				<h1 id="count-el" class="text-5xl font-bold">{validCombos.length}</h1>
 			</div>
-			<TetraSolutionList solutions={$solutions} />
+			<TetraSolutionList bind:solutions={validCombos} />
 		</div>
 	</div>
 </div>
