@@ -6,3 +6,23 @@
 body {
 	font-family: Inter, Arial, 'Helvetica Neue', Helvetica, sans-serif;
 }
+:root {
+	--primary: #dcbe87;
+	--secondary: #ab7954;
+}
+
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--secondary) var(--primary);
+}
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+	width: 1rem;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: var(--secondary);
+	border-radius: 1rem;
+	border: 0.25rem solid rgba(0, 0, 0, 0);
+	background-clip: padding-box;
+}
