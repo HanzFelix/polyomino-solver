@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 
+// TODO: would prefer if the structure is similar to TetraColors.js
 export function createTetraPieceStore(initial) {
 	let uid = 1;
 
