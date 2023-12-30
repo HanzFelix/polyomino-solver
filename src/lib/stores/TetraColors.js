@@ -23,10 +23,10 @@ function createTetraColorStore() {
 			initialcolors['X'] = configColors.tcyan['400'];
 			set(initialcolors);
 			uid = 1 + Object.keys(initialcolors).length;
-		}
-		/*remove: (tetrapiece) => {
+		},
+		remove: (tetrapiece) => {
 			update(($tetrapieces) => $tetrapieces.filter((t) => t !== tetrapiece));
-		}*/
+		}
 	};
 }
 
