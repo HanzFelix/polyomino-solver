@@ -104,13 +104,14 @@
 	let finalBoard;
 	let readyCombos = [];
 	let validCombos = [];
+	let pendingValidation = 0;
+	$: workersDone = pendingValidation == 0;
 	function findSolutions() {
 		if (workersDone) {
 			readyCombos = [];
 			validCombos = [];
-			busyValidationWorkers = 0;
 			finalBoard = boardifyBlocked();
-			comboWorkersDone = false;
+			pendingValidation = 1;
 			comboWorker.postMessage({
 				pieces: $pieces,
 				maxWeight: finalBoard.free_space
@@ -118,26 +119,11 @@
 		} else {
 			comboWorker.terminate();
 			validWorker.terminate();
-		}
-	}
-
-	function updateQueue() {
-		if (readyCombos.length > 0 && busyValidationWorkers < maxValidationWorkers) {
-			validWorker.postMessage({
-				tetraBag: $pieces,
-				tetraBoard: finalBoard,
-				combination: readyCombos.shift()
-			});
-			busyValidationWorkers++;
+			pendingValidation = 0;
 		}
 	}
 
 	let comboWorker, validWorker;
-	let busyValidationWorkers = 0;
-	let maxValidationWorkers = 4;
-	let comboWorkersDone = true;
-	$: validWorkersDone = busyValidationWorkers == 0;
-	$: workersDone = comboWorkersDone && validWorkersDone;
 
 	onMount(() => {
 		updateBoardSize();
@@ -145,14 +131,19 @@
 		comboWorker.onmessage = (event) => {
 			const { state, combo } = event.data;
 			if (state == 'found') {
-				readyCombos.push(combo);
+				readyCombos = [...readyCombos, combo];
+				pendingValidation++;
+				validWorker.postMessage({
+					tetraBag: $pieces,
+					tetraBoard: finalBoard,
+					combination: readyCombos.shift()
+				});
 			} else {
-				comboWorkersDone = true;
+				pendingValidation--;
 			}
-			updateQueue();
 		};
 		comboWorker.onmessageerror = (event) => {
-			console.error(`Error receiving message from worker: ${event}`);
+			console.error(`Error receiving message from comboWorker: ${event}`);
 		};
 
 		validWorker = new Worker(validWorkerUrl);
@@ -161,11 +152,10 @@
 			if (state == 'found') {
 				validCombos = [...validCombos, result];
 			}
-			busyValidationWorkers--;
-			updateQueue();
+			pendingValidation--;
 		};
 		validWorker.onmessageerror = (event) => {
-			console.error(`Error receiving message from worker: ${event}`);
+			console.error(`Error receiving message from validWorker: ${event}`);
 		};
 	});
 	function tempAdd() {
@@ -272,7 +262,7 @@
 		</div>
 		<div class="flex rounded-b-md">
 			<p class="bg-tbrown-500 py-2 px-4 text-tbrown-50 basis-full">
-				{workersDone ? 'Ready' : readyCombos.length + '->' + busyValidationWorkers}
+				{workersDone ? 'Ready' : 'Pending: ' + pendingValidation}
 			</p>
 			<button
 				on:click={findSolutions}
