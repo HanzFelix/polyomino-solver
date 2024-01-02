@@ -1,6 +1,9 @@
+let foundCombos;
+let curCombo;
+
 onmessage = (event) => {
 	const { pieces, maxWeight } = event.data;
-	generatePieceCombos(tallyPieceWeights(pieces), maxWeight);
+	searchPieceCombos(tallyPieceWeights(pieces), maxWeight);
 	postMessage({ state: 'done', combo: [] });
 };
 
@@ -16,7 +19,7 @@ function tallyPieceWeights(pieces) {
 }
 
 // search combinations from bag (via sum of piece weight == free_space)
-function generatePieceCombos(pieceWeights, maxWeight) {
+function searchPieceCombos(pieceWeights, maxWeight) {
 	let totalWeight = 0;
 
 	pieceWeights.forEach((piece) => {
@@ -29,20 +32,17 @@ function generatePieceCombos(pieceWeights, maxWeight) {
 	}
 
 	// generate hypothetical combinations
-	let foundCombos = new Set();
-	let curCombo = [];
-	findCombo(pieceWeights, foundCombos, curCombo, maxWeight, totalWeight, 0, 0);
-
-	// parse array of strings
-	/*let filteredList = [];
-    for (let combo of filteredBag) {
-      filteredList.push(combo.split("-").map(Number));
-    }
-  
-    return filteredList;*/
+	foundCombos = new Set();
+	curCombo = [];
+	findCombo(pieceWeights, maxWeight, totalWeight, 0, 0);
 }
 
-function findCombo(pieceWeights, foundCombos, curCombo, maxWeight, remWeight, curWeight, curIndex) {
+function findCombo(pieceWeights, maxWeight, remWeight, curWeight, curIndex) {
+	// skip oversized combo
+	if (curWeight > maxWeight || curIndex == pieceWeights.length) {
+		return;
+	}
+
 	// already valid combo? add
 	if (curWeight == maxWeight) {
 		combo = curCombo.slice().sort();
@@ -60,22 +60,17 @@ function findCombo(pieceWeights, foundCombos, curCombo, maxWeight, remWeight, cu
 		let newWeight = pieceWeights[i].weight + curWeight;
 		rWeight -= pieceWeights[i].weight;
 
-		// not enough pieces to fill the board
+		// not enough remaining pieces to fill the board
 		if (rWeight + newWeight < maxWeight) {
 			return;
 		}
 
-		// skip oversized combo
-		if (newWeight > maxWeight) {
-			continue;
-		}
-
 		// test next combo sequence
 		curCombo.push(pieceWeights[i].id);
-		findCombo(pieceWeights, foundCombos, curCombo, maxWeight, rWeight, newWeight, i + 1);
+		findCombo(pieceWeights, maxWeight, rWeight, newWeight, i + 1);
 		curCombo.pop();
-
-		// skip current piece
-		findCombo(pieceWeights, foundCombos, curCombo, maxWeight, rWeight, curWeight, i + 1);
 	}
+
+	// skip current piece
+	findCombo(pieceWeights, maxWeight, rWeight, curWeight, curIndex + 1);
 }
