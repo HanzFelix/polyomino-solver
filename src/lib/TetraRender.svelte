@@ -11,7 +11,14 @@
 		let shapeHeight = shape.length;
 		grid = Math.max(shapeHeight, shapeWidth) < grid ? grid : Math.max(shapeHeight, shapeWidth);
 
-		let gap = grid < 6 ? 3 : 1;
+		let gap;
+		if (grid < 5) {
+			gap = 3;
+		} else if (grid < 7) {
+			gap = 2;
+		} else {
+			gap = 1;
+		}
 		let pad = 3;
 		let squareSize = (100 - (grid + 1) * gap - pad * 2) / grid; // 8 + 30
 
