@@ -1,19 +1,10 @@
 import { writable } from 'svelte/store';
 
-// TODO: would prefer if the structure is similar to TetraColors.js
-export function createTetraPieceStore(initial) {
+function createTetraPieceStore() {
 	let uid = 1;
+	const tetrapieces = {};
 
-	const tetrapieces = initial.map((shape) => {
-		return {
-			id: uid++,
-			shape,
-			quantity: 0,
-			weight: shape.reduce((count, row) => count + row.filter((x) => x !== 0).length, 0)
-		};
-	});
-
-	const { subscribe, update } = writable(tetrapieces);
+	const { subscribe, update, set } = writable(tetrapieces);
 
 	return {
 		subscribe,
@@ -27,8 +18,22 @@ export function createTetraPieceStore(initial) {
 
 			update(($tetrapieces) => [...$tetrapieces, tetrapiece]);
 		},
-		remove: (tetrapiece) => {
-			update(($tetrapieces) => $tetrapieces.filter((t) => t !== tetrapiece));
+		init: (pieces) => {
+			uid = 1;
+			const p = pieces.map((shape) => {
+				return {
+					id: uid++,
+					shape,
+					quantity: 0,
+					weight: shape.reduce((count, row) => count + row.filter((x) => x !== 0).length, 0)
+				};
+			});
+			set(p);
+		},
+		remove: (id) => {
+			update(($tetrapieces) => $tetrapieces.filter((t) => t.id !== id));
 		}
 	};
 }
+
+export const tetrapieces = createTetraPieceStore();
