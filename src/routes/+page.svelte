@@ -5,22 +5,22 @@
 	import TetraSolutionList from '$lib/TetraSolutionList.svelte';
 	import TetraBoard from '$lib/TetraBoard.svelte';
 	import { tetracolors } from '$lib/stores/TetraColors.js';
-	import { createTetraPieceStore } from '$lib/stores/TetraPieces.js';
+	import { tetrapieces } from '$lib/stores/TetraPieces.js';
 	import { onMount, tick } from 'svelte';
 
-	tetracolors.init({
-		1: '#CC993C',
-		2: '#47C1A2',
-		3: '#BD4F5A',
-		4: '#217958',
-		5: '#4D78A9',
-		6: '#CE7647',
-		7: '#664A74',
-		8: '#65A156',
-		9: '#BF7A7E'
-	});
+	tetracolors.init([
+		'#CC993C',
+		'#47C1A2',
+		'#BD4F5A',
+		'#217958',
+		'#4D78A9',
+		'#CE7647',
+		'#664A74',
+		'#65A156',
+		'#BF7A7E'
+	]);
 
-	const pieces = createTetraPieceStore([
+	tetrapieces.init([
 		[
 			[1, 1],
 			[1, 1]
@@ -113,7 +113,7 @@
 			finalBoard = boardifyBlocked();
 			pendingValidation = 1;
 			comboWorker.postMessage({
-				pieces: $pieces,
+				pieces: $tetrapieces,
 				maxWeight: finalBoard.free_space
 			});
 		} else {
@@ -134,7 +134,7 @@
 				readyCombos = [...readyCombos, combo];
 				pendingValidation++;
 				validWorker.postMessage({
-					tetraBag: $pieces,
+					tetraBag: $tetrapieces,
 					tetraBoard: finalBoard,
 					combination: readyCombos.shift()
 				});
@@ -257,7 +257,7 @@
 						Add +
 					</button>
 				</div>
-				<TetraPieceList pieces={$pieces} />
+				<TetraPieceList pieces={$tetrapieces} />
 			</section>
 		</div>
 		<div class="flex rounded-b-md">
