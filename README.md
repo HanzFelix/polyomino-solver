@@ -1,5 +1,6 @@
 # create-svelte
 
+[![Deploy to GitHub Pages](https://github.com/HanzFelix/tetra-solver/actions/workflows/deploy.yml/badge.svg)](https://github.com/HanzFelix/tetra-solver/actions/workflows/deploy.yml)
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
 
 ## Creating a project
