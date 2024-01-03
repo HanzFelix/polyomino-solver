@@ -253,7 +253,10 @@
 			<section>
 				<div class="flex justify-between mb-2">
 					<h2 class="text-xl">Pieces</h2>
-					<button class="px-2 py-1 rounded-md text-tbrown-50 bg-tcyan-900" on:click={tempAdd}>
+					<button
+						class="px-2 py-1 rounded-md text-tbrown-50 bg-tcyan-900 opacity-20"
+						on:click={tempAdd}
+					>
 						Add +
 					</button>
 				</div>
