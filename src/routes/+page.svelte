@@ -225,8 +225,8 @@
 <div
 	class="container mx-auto flex flex-col md:max-h-screen md:flex-row gap-4 py-8 px-4 md:px-0 h-full"
 >
-	<div class="md:basis-4/12 flex flex-col justify-between bg-tbrown-300 rounded-xl overflow-hidden">
-		<div class="flex gap-6 flex-col p-4 bg-tbrown-300 rounded-t-md md:overflow-y-auto">
+	<div class="md:basis-4/12 flex flex-col justify-between bg-tbrown-300 rounded-xl">
+		<div class="flex gap-6 flex-col p-4 bg-tbrown-300 rounded-t-lg md:overflow-y-auto">
 			<section>
 				<div class="flex justify-between mb-2 items-end flex-wrap">
 					<h2 class="text-xl">Board size</h2>
@@ -317,8 +317,8 @@
 				<TetraPieceList pieces={$tetrapieces} />
 			</section>
 		</div>
-		<div class="flex rounded-b-md">
-			<p class="bg-tbrown-500 py-2 px-4 text-tbrown-50 basis-full">
+		<div class="flex">
+			<p class="bg-tbrown-500 py-2 px-4 text-tbrown-50 basis-full rounded-bl-lg">
 				{workersDone
 					? 'Need: ' + $pieceweights + '/' + rows * cols
 					: 'Pending: ' + pendingValidation}
@@ -327,13 +327,13 @@
 				on:click={findSolutions}
 				class="{workersDone && rows * cols <= $pieceweights
 					? 'bg-tcyan-900'
-					: 'bg-tbrown-500'}  font-black py-2 px-4 basis-36 text-left text-tbrown-50"
+					: 'bg-tbrown-500'}  font-black py-2 px-4 basis-36 text-left text-tbrown-50 rounded-br-lg"
 			>
 				{workersDone ? 'START' : 'PROCESSING'}
 			</button>
 		</div>
 	</div>
-	<div class="bg-tbrown-300 md:basis-8/12 rounded-xl flex flex-col-reverse md:flex-row">
+	<div class="bg-tbrown-300 md:basis-8/12 rounded-lg flex flex-col-reverse md:flex-row">
 		<div class="md:self-center p-4 w-full">
 			<TetraBoard {rows} {cols} bind:board={blockedCells} />
 		</div>
