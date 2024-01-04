@@ -88,10 +88,15 @@
 
 	let blockedCells = [];
 
-	$: isCurrentDims = rows == in_rows && cols == in_cols;
+	//$: isCurrentDims = rows == in_rows && cols == in_cols;
 	$: hasBlocked = blockedCells.includes(true);
 
 	function updateBoardSize() {
+		in_rows = in_rows < 4 ? 4 : in_rows;
+		in_cols = in_cols < 4 ? 4 : in_cols;
+		in_rows = in_rows > 12 ? 12 : in_rows;
+		in_cols = in_cols > 12 ? 12 : in_cols;
+
 		rows = in_rows;
 		cols = in_cols;
 		blockedCells = new Array(rows * cols).fill(false);
@@ -143,6 +148,7 @@
 				maxWeight: finalBoard.free_space
 			});
 		} else {
+			// need a better "pause/stop" implementation
 			/*
 			comboWorker.terminate();
 			validWorker.terminate();
@@ -186,15 +192,27 @@
 	onMount(() => {
 		updateBoardSize();
 		loadWorkers();
+		tempAdd();
 	});
 	function tempAdd() {
 		validCombos = [
 			...validCombos,
 			[
-				['X', 4, 4, 'X'],
-				[4, 4, 1, 1],
-				[3, 3, 1, 1],
-				['X', 3, 3, 'X']
+				[12, 12, 1, 5, 5, 14],
+				[12, 1, 1, 1, 5, 6],
+				[6, 6, 1, 14, 5, 6],
+				[6, 6, 5, 7, 6, 6],
+				[6, 6, 5, 7, 7, 13],
+				[6, 6, 5, 5, 7, 13]
+			],
+			[
+				[12, 12, 1, 5, 5, 14, 11],
+				[12, 1, 1, 1, 5, 6, 11],
+				[6, 6, 1, 14, 5, 6, 11],
+				[6, 6, 5, 7, 6, 6, 11],
+				[6, 6, 5, 7, 7, 9, 9],
+				[6, 6, 5, 5, 7, 9, 9],
+				[14, 13, 13, 11, 11, 11, 11]
 			]
 		];
 	}
@@ -212,17 +230,16 @@
 			<section>
 				<div class="flex justify-between mb-2 items-end flex-wrap">
 					<h2 class="text-xl">Board size</h2>
-					<div
-						id="color-apply"
+					<!--div
 						class="text-tbrown-50 {isCurrentDims
 							? 'bg-tbrown-500'
 							: 'bg-tcyan-900'} px-2 relative rounded-md flex overflow-hidden transition-colors"
 					>
-						<div id="size-apply" class="{isCurrentDims ? 'w-0' : ''} truncate py-1">
+						<div class="{isCurrentDims ? 'w-0' : ''} truncate py-1">
 							<button on:click={updateBoardSize}>Update&nbsp;</button>
 						</div>
 						<span class="font-bold py-1">&check;</span>
-					</div>
+					</div-->
 				</div>
 				<div class="flex gap-4">
 					<div class="basis-full flex">
@@ -241,6 +258,7 @@
 							max="12"
 							placeholder="4-12"
 							bind:value={in_cols}
+							on:focusout={updateBoardSize}
 						/>
 					</div>
 					<div class="basis-full flex">
@@ -259,6 +277,7 @@
 							max="12"
 							placeholder="4-12"
 							bind:value={in_rows}
+							on:focusout={updateBoardSize}
 						/>
 					</div>
 				</div>
@@ -321,7 +340,7 @@
 		<div class="lg:basis-1/4 md:basis-1/3 flex flex-col min-w-48">
 			<div class="flex justify-between items-end gap-2 p-4 md:pl-2">
 				<h1 class="font-semibold w-min">Solution{validCombos.length == 1 ? '' : 's'} Found:</h1>
-				<h1 id="count-el" class="text-5xl font-bold">{validCombos.length}</h1>
+				<h1 class="text-5xl font-bold cursor-pointer">{validCombos.length}</h1>
 			</div>
 			<TetraSolutionList bind:solutions={validCombos} />
 		</div>
