@@ -1,14 +1,18 @@
 @import url('https://fonts.googleapis.com/css?family=Inter');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+	--primary: theme(colors.tbrown.300);
+	--secondary: theme(colors.tbrown.500);
+	--background: theme(colors.tbrown.900);
+}
+
 body {
 	font-family: Inter, Arial, 'Helvetica Neue', Helvetica, sans-serif;
-}
-:root {
-	--primary: #dcbe87;
-	--secondary: #ab7954;
+	background-color: var(--background);
 }
 
 * {
