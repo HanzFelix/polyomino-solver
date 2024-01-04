@@ -5,53 +5,79 @@
 	import TetraSolutionList from '$lib/TetraSolutionList.svelte';
 	import TetraBoard from '$lib/TetraBoard.svelte';
 	import { tetracolors } from '$lib/stores/TetraColors.js';
-	import { tetrapieces } from '$lib/stores/TetraPieces.js';
-	import { onMount, tick } from 'svelte';
+	import { tetrapieces, pieceweights } from '$lib/stores/TetraPieces.js';
+	import { onMount } from 'svelte';
 
 	tetracolors.init([
-		'#CC993C',
-		'#47C1A2',
-		'#BD4F5A',
-		'#217958',
-		'#4D78A9',
+		'#8862B2',
+		'#538076',
+		'#67BF6A',
+		'#726938',
 		'#CE7647',
-		'#664A74',
-		'#65A156',
-		'#BF7A7E'
+		'#194166',
+		'#437921',
+		'#BD2F3E',
+		'#CC993C',
+		'#663280',
+		'#47C1A2',
+		'#59372F',
+		'#5B8EC7',
+		'#C46965'
 	]);
 
 	tetrapieces.init([
 		[
-			[1, 1],
-			[1, 1]
-		],
-		[[2, 2, 2, 2]],
-		[
-			[3, 3, 0],
-			[0, 3, 3]
+			[0, 1, 0],
+			[1, 1, 1],
+			[0, 1, 0]
 		],
 		[
-			[0, 4, 4],
-			[4, 4, 0]
+			[2, 2, 0],
+			[0, 2, 0],
+			[0, 2, 2]
 		],
 		[
-			[5, 0, 0],
-			[5, 5, 5]
+			[0, 3, 0],
+			[0, 3, 0],
+			[3, 3, 3]
 		],
 		[
-			[0, 0, 6],
-			[6, 6, 6]
+			[4, 0, 4],
+			[4, 4, 4]
 		],
 		[
-			[0, 7, 0],
-			[7, 7, 7]
+			[5, 0],
+			[5, 0],
+			[5, 5]
 		],
 		[
-			[0, 8, 0],
-			[8, 8, 8],
-			[0, 8, 0]
+			[0, 6],
+			[0, 6],
+			[6, 6]
 		],
-		[[9]]
+		[
+			[0, 7, 7],
+			[7, 7, 0]
+		],
+		[
+			[8, 8, 0],
+			[0, 8, 8]
+		],
+		[
+			[9, 9],
+			[9, 9]
+		],
+		[
+			[0, 10, 0],
+			[10, 10, 10]
+		],
+		[[11], [11], [11], [11]],
+		[
+			[12, 12],
+			[12, 0]
+		],
+		[[13, 13]],
+		[[14]]
 	]);
 
 	// board stuff
@@ -102,13 +128,13 @@
 
 	// worker stuff
 	let finalBoard;
-	let readyCombos = [];
+	let hypotheticalCombos = 0;
 	let validCombos = [];
 	let pendingValidation = 0;
 	$: workersDone = pendingValidation == 0;
 	function findSolutions() {
-		if (workersDone) {
-			readyCombos = [];
+		if (workersDone && rows * cols <= $pieceweights) {
+			hypotheticalCombos = 0;
 			validCombos = [];
 			finalBoard = boardifyBlocked();
 			pendingValidation = 1;
@@ -117,46 +143,49 @@
 				maxWeight: finalBoard.free_space
 			});
 		} else {
+			/*
 			comboWorker.terminate();
 			validWorker.terminate();
 			pendingValidation = 0;
+			*/
 		}
 	}
 
 	let comboWorker, validWorker;
+	function loadWorkers() {
+		if (!comboWorker) {
+			comboWorker = new Worker(comboWorkerUrl);
+			comboWorker.onmessage = (event) => {
+				const { state, combo } = event.data;
+				if (state == 'found') {
+					hypotheticalCombos++;
+					pendingValidation++;
+					validWorker.postMessage({
+						tetraBag: $tetrapieces,
+						tetraBoard: finalBoard,
+						combination: combo
+					});
+				} else {
+					pendingValidation--;
+				}
+			};
+		}
+
+		if (!validWorker) {
+			validWorker = new Worker(validWorkerUrl);
+			validWorker.onmessage = (event) => {
+				const { state, result } = event.data;
+				if (state == 'found') {
+					validCombos = [...validCombos, result];
+				}
+				pendingValidation--;
+			};
+		}
+	}
 
 	onMount(() => {
 		updateBoardSize();
-		comboWorker = new Worker(comboWorkerUrl);
-		comboWorker.onmessage = (event) => {
-			const { state, combo } = event.data;
-			if (state == 'found') {
-				readyCombos = [...readyCombos, combo];
-				pendingValidation++;
-				validWorker.postMessage({
-					tetraBag: $tetrapieces,
-					tetraBoard: finalBoard,
-					combination: readyCombos.shift()
-				});
-			} else {
-				pendingValidation--;
-			}
-		};
-		comboWorker.onmessageerror = (event) => {
-			console.error(`Error receiving message from comboWorker: ${event}`);
-		};
-
-		validWorker = new Worker(validWorkerUrl);
-		validWorker.onmessage = (event) => {
-			const { state, result } = event.data;
-			if (state == 'found') {
-				validCombos = [...validCombos, result];
-			}
-			pendingValidation--;
-		};
-		validWorker.onmessageerror = (event) => {
-			console.error(`Error receiving message from validWorker: ${event}`);
-		};
+		loadWorkers();
 	});
 	function tempAdd() {
 		validCombos = [
@@ -196,14 +225,17 @@
 					</div>
 				</div>
 				<div class="flex gap-4">
-					<div class="basis-full flex rounded-md overflow-hidden">
-						<label for="boardx" class="py-1 px-2 font-black text-tbrown-50 bg-tbrown-500">
+					<div class="basis-full flex">
+						<label
+							for="boardx"
+							class="py-1 px-2 font-black text-tbrown-50 bg-tbrown-500 rounded-l-md"
+						>
 							X
 						</label>
 						<input
 							type="number"
 							name="boardx"
-							class="basis-full px-2 bg-tbrown-50"
+							class="basis-full px-2 bg-tbrown-50 rounded-r-md"
 							size="1"
 							min="4"
 							max="12"
@@ -211,14 +243,17 @@
 							bind:value={in_cols}
 						/>
 					</div>
-					<div class="basis-full flex rounded-md overflow-hidden">
-						<label for="boardy" class="py-1 px-2 font-black text-tbrown-50 bg-tbrown-500">
+					<div class="basis-full flex">
+						<label
+							for="boardy"
+							class="py-1 px-2 font-black text-tbrown-50 bg-tbrown-500 rounded-l-md"
+						>
 							Y
 						</label>
 						<input
 							type="number"
 							name="boardy"
-							class="px-2 basis-full bg-tbrown-50"
+							class="px-2 basis-full bg-tbrown-50 rounded-r-md"
 							size="1"
 							min="4"
 							max="12"
@@ -247,33 +282,35 @@
 					>
 						info
 					</label>
-					<p class="basis-full px-2">Select cells in the board to block</p>
+					<p class="basis-full px-2">Optional: Select cells in the board to block</p>
 				</div>
 			</section>
 			<section>
 				<div class="flex justify-between mb-2">
 					<h2 class="text-xl">Pieces</h2>
-					<button
+					<!--button
 						class="px-2 py-1 rounded-md text-tbrown-50 bg-tcyan-900 opacity-20"
 						on:click={tempAdd}
 					>
 						Add +
-					</button>
+					</button-->
 				</div>
 				<TetraPieceList pieces={$tetrapieces} />
 			</section>
 		</div>
 		<div class="flex rounded-b-md">
 			<p class="bg-tbrown-500 py-2 px-4 text-tbrown-50 basis-full">
-				{workersDone ? 'Ready' : 'Pending: ' + pendingValidation}
+				{workersDone
+					? 'Need: ' + $pieceweights + '/' + rows * cols
+					: 'Pending: ' + pendingValidation}
 			</p>
 			<button
 				on:click={findSolutions}
-				class="{workersDone
+				class="{workersDone && rows * cols <= $pieceweights
 					? 'bg-tcyan-900'
-					: 'bg-red-900'}  font-black py-2 px-4 basis-36 text-left text-tbrown-50"
+					: 'bg-tbrown-500'}  font-black py-2 px-4 basis-36 text-left text-tbrown-50"
 			>
-				{workersDone ? 'START' : 'ABORT'}
+				{workersDone ? 'START' : 'PROCESSING'}
 			</button>
 		</div>
 	</div>
