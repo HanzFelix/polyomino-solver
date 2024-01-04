@@ -9,9 +9,9 @@
 	class="md:max-w-md md:max-h-[28rem] m-auto bg-tbrown-50 aspect-square flex flex-col justify-center rounded-lg"
 >
 	<div
-		class="grid p-4 rounded-lg
+		class="grid rounded-lg
 		{cols < rows ? '-scale-x-100 -rotate-90' : ''} 
-		{Math.max(rows, cols) < 8 ? 'gap-1' : ''}"
+		{Math.max(rows, cols) < 7 ? 'gap-1 p-4 ' : 'p-2'}"
 		style="grid-template-columns: {`repeat(${Math.max(rows, cols)}, minmax(auto, 1fr))`};"
 	>
 		{#each board as blocked, i}
