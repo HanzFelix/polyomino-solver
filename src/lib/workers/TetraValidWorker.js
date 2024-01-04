@@ -20,11 +20,8 @@ function solveBoard(pieces, board, combination, comboIndex) {
 	for (const rotated of generateRotations(pieces[combination[comboIndex] - 1].shape)) {
 		for (let row = 0; row <= board.length - rotated.length; row++) {
 			for (let col = 0; col <= board[0].length - rotated[0].length; col++) {
-				if (canPlacePiece(board, rotated, row, col)) {
-					// placing...
-					placePiece(board, rotated, row, col);
-
-					// proceed to next piece
+				if (piecePlaced(board, rotated, row, col)) {
+					// proceed to next piece if successfully placed
 					if (solveBoard(pieces, board, combination, comboIndex + 1)) return true;
 
 					// removing... current placement is bad for next pieces
@@ -109,4 +106,38 @@ function printBoard(board) {
 		console.log(row.map((val) => (val ? val : '-')).join(' '));
 	}
 	console.log();
+}
+
+function piecePlaced(board, piece, row, col) {
+	let placeable = true;
+	let i_r, j_r;
+	looprow: for (let i = 0; i < piece.length; i++) {
+		for (let j = 0; j < piece[0].length; j++) {
+			//??
+			if (piece[i][j] && board[row + i][col + j]) {
+				placeable = false;
+				i_r = i;
+				j_r = j - 1;
+				break looprow;
+			}
+
+			if (piece[i][j]) {
+				board[row + i][col + j] = piece[i][j];
+			}
+		}
+	}
+
+	if (placeable) return true;
+
+	// undo placement so far,
+	for (let i = i_r; i >= 0; i--) {
+		for (let j = j_r; j >= 0; j--) {
+			if (piece[i][j] == board[row + i][col + j]) {
+				board[row + i][col + j] = 0;
+			}
+		}
+		j_r = piece[0].length - 1;
+	}
+
+	return false;
 }
