@@ -1,8 +1,15 @@
 <script>
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
+
 	export let board;
 	export let rows;
 	export let cols;
-	//visual transpose if col < row
+
+	function updateBlocked(index) {
+		board[index] = !board[index];
+		dispatch('update', { value: board[index] ? 1 : -1 });
+	}
 </script>
 
 <div
@@ -20,7 +27,7 @@
 					? 'bg-tcyan-400'
 					: 'bg-tcyan-300'} "
 				on:click={() => {
-					blocked = !blocked;
+					updateBlocked(i);
 				}}
 			>
 				<!--svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">

@@ -87,8 +87,8 @@
 		in_cols = 4;
 
 	let blockedCells = [];
+	let blockedCount = 0;
 
-	//$: isCurrentDims = rows == in_rows && cols == in_cols;
 	$: hasBlocked = blockedCells.includes(true);
 
 	function updateBoardSize() {
@@ -100,10 +100,12 @@
 		rows = in_rows;
 		cols = in_cols;
 		blockedCells = new Array(rows * cols).fill(false);
+		blockedCount = 0;
 	}
 
 	function clearBlocked() {
 		blockedCells = blockedCells.fill(false);
+		blockedCount = 0;
 	}
 
 	// board translations stuff
@@ -320,7 +322,7 @@
 		<div class="flex">
 			<p class="bg-tbrown-500 py-2 px-4 text-tbrown-50 basis-full rounded-bl-lg">
 				{workersDone
-					? 'Need: ' + $pieceweights + '/' + rows * cols
+					? 'Need: ' + $pieceweights + '/' + (rows * cols - blockedCount)
 					: 'Pending: ' + pendingValidation}
 			</p>
 			<button
@@ -335,7 +337,14 @@
 	</div>
 	<div class="bg-tbrown-300 md:basis-8/12 rounded-lg flex flex-col-reverse md:flex-row">
 		<div class="md:self-center p-4 w-full">
-			<TetraBoard {rows} {cols} bind:board={blockedCells} />
+			<TetraBoard
+				{rows}
+				{cols}
+				bind:board={blockedCells}
+				on:update={(event) => {
+					blockedCount += event.detail.value;
+				}}
+			/>
 		</div>
 		<div class="lg:basis-1/4 md:basis-1/3 flex flex-col min-w-48">
 			<div class="flex justify-between items-end gap-2 p-4 md:pl-2">
