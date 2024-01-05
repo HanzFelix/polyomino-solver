@@ -7,6 +7,8 @@
 	import { tetracolors } from '$lib/stores/TetraColors.js';
 	import { tetrapieces, pieceweights } from '$lib/stores/TetraPieces.js';
 	import { onMount } from 'svelte';
+	import { fly } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
 
 	tetracolors.init([
 		'#8862B2',
@@ -137,6 +139,7 @@
 	let hypotheticalCombos = 0;
 	let validCombos = [];
 	let pendingValidation = 0;
+	let showFinishNotif = false;
 	$: workersDone = pendingValidation == 0;
 	$: freeSpace = rows * cols - blockedCount;
 	function findSolutions() {
@@ -149,13 +152,6 @@
 				pieces: $tetrapieces,
 				maxWeight: finalBoard.free_space
 			});
-		} else {
-			// need a better "pause/stop" implementation
-			/*
-			comboWorker.terminate();
-			validWorker.terminate();
-			pendingValidation = 0;
-			*/
 		}
 	}
 
@@ -175,6 +171,9 @@
 					});
 				} else {
 					pendingValidation--;
+					if (!pendingValidation) {
+						showFinishNotif = true;
+					}
 				}
 			};
 		}
@@ -187,6 +186,9 @@
 					validCombos = [...validCombos, result];
 				}
 				pendingValidation--;
+				if (!pendingValidation) {
+					showFinishNotif = true;
+				}
 			};
 		}
 	}
@@ -194,39 +196,14 @@
 	onMount(() => {
 		updateBoardSize();
 		loadWorkers();
-		tempAdd();
 	});
-	function tempAdd() {
-		validCombos = [
-			...validCombos,
-			[
-				[12, 12, 1, 5, 5, 14],
-				[12, 1, 1, 1, 5, 6],
-				[6, 6, 1, 14, 5, 6],
-				[6, 6, 5, 7, 6, 6],
-				[6, 6, 5, 7, 7, 13],
-				[6, 6, 5, 5, 7, 13]
-			],
-			[
-				[12, 12, 1, 5, 5, 14, 11],
-				[12, 1, 1, 1, 5, 6, 11],
-				[6, 6, 1, 14, 5, 6, 11],
-				[6, 6, 5, 7, 6, 6, 11],
-				[6, 6, 5, 7, 7, 9, 9],
-				[6, 6, 5, 5, 7, 9, 9],
-				[14, 13, 13, 11, 11, 11, 11]
-			]
-		];
-	}
 </script>
 
 <svelte:head>
 	<title>Tetra Solver</title>
 	<meta name="description" content="Tetra Solver" />
 </svelte:head>
-<div
-	class="container mx-auto flex flex-col md:max-h-screen md:flex-row gap-4 py-8 px-4 md:px-0 h-full"
->
+<div class="container mx-auto flex flex-col md:flex-row gap-4 py-8 pl-4 pr-1 md:px-0 h-full">
 	<div class="md:basis-4/12 flex flex-col justify-between bg-tbrown-300 rounded-xl">
 		<div class="flex gap-6 flex-col p-4 md:pr-2 bg-tbrown-300 rounded-t-lg md:overflow-y-auto">
 			<section>
@@ -347,9 +324,24 @@
 		<div class="lg:basis-1/4 md:basis-1/3 flex flex-col min-w-48">
 			<div class="flex justify-between items-end gap-2 p-4 md:pl-4">
 				<h1 class="font-semibold w-min">Solution{validCombos.length == 1 ? '' : 's'} Found:</h1>
-				<h1 class="text-5xl font-bold cursor-pointer">{validCombos.length}</h1>
+				<h1 class="text-5xl font-bold">{validCombos.length}</h1>
 			</div>
 			<TetraSolutionList bind:solutions={validCombos} />
 		</div>
 	</div>
+</div>
+<div class="fixed top-0 right-0 flex flex-col gap-2 items-end mt-12 select-none md:pr-2">
+	{#if showFinishNotif}
+		<div
+			class=" bg-tbrown-500 text-white px-4 py-4 min-w-48 flex items-center gap-2 rounded-md"
+			in:fly={{ duration: 200, x: '100%', opacity: 0.5, easing: cubicOut }}
+			out:fly={{ delay: 2000, duration: 200, x: '100%', opacity: 0.5, easing: cubicOut }}
+			on:introend={() => {
+				showFinishNotif = false;
+			}}
+		>
+			<span class="material-symbols-rounded">check</span>
+			<span>Finished</span>
+		</div>
+	{/if}
 </div>
