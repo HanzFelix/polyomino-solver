@@ -17,9 +17,11 @@ function solveBoard(pieces, board, combination, comboIndex) {
 		return true;
 	}
 	// iterate thru rotations
-	for (const rotated of generateRotations(pieces[combination[comboIndex] - 1].shape)) {
-		for (let row = 0; row <= board.length - rotated.length; row++) {
-			for (let col = 0; col <= board[0].length - rotated[0].length; col++) {
+	let pieceRotations = generateRotations(pieces[combination[comboIndex] - 1].shape);
+	let minPieceDim = Math.min(pieceRotations[0].length, pieceRotations[0][0].length);
+	for (let row = 0; row <= board.length - minPieceDim; row++) {
+		for (let col = 0; col <= board[0].length - minPieceDim; col++) {
+			for (const rotated of pieceRotations) {
 				if (piecePlaced(board, rotated, row, col)) {
 					// proceed to next piece if successfully placed
 					if (solveBoard(pieces, board, combination, comboIndex + 1)) return true;
@@ -109,6 +111,9 @@ function printBoard(board) {
 }
 
 function piecePlaced(board, piece, row, col) {
+	if (board.length - piece.length - row < 0 || board[0].length - piece[0].length - col < 0)
+		return false;
+
 	let placeable = true;
 	let i_r, j_r;
 	looprow: for (let i = 0; i < piece.length; i++) {
