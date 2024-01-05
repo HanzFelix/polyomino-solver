@@ -20,6 +20,9 @@ body {
 	scrollbar-color: var(--secondary) var(--primary);
 	scrollbar-gutter: stable;
 }
+html {
+	scrollbar-gutter: auto;
+}
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
 	width: 1rem;
