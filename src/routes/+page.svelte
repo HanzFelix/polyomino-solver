@@ -203,7 +203,7 @@
 	<title>Tetra Solver</title>
 	<meta name="description" content="Tetra Solver" />
 </svelte:head>
-<div class="container mx-auto flex flex-col md:flex-row gap-4 py-8 pl-4 pr-1 md:px-0 h-full">
+<div class="container mx-auto flex flex-col md:flex-row gap-4 py-8 px-4 md:px-0 h-full">
 	<div class="md:basis-4/12 flex flex-col justify-between bg-tbrown-300 rounded-xl">
 		<div class="flex gap-6 flex-col p-4 md:pr-2 bg-tbrown-300 rounded-t-lg md:overflow-y-auto">
 			<section>
