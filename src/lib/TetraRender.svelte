@@ -1,12 +1,15 @@
 <script>
-	import { onMount } from 'svelte';
+	import { afterUpdate } from 'svelte';
 	import { tetracolors } from '$lib/stores/TetraColors';
 	export let grid = 4;
+	export let radius = 3;
 	export let shape;
 
 	let tetraSVG;
 
-	onMount(() => {
+	afterUpdate(() => {
+		tetraSVG.innerHTML = '';
+
 		let shapeWidth = shape[0].length;
 		let shapeHeight = shape.length;
 		grid = Math.max(shapeHeight, shapeWidth) < grid ? grid : Math.max(shapeHeight, shapeWidth);
@@ -16,9 +19,10 @@
 			gap = 2;
 			rad = 3;
 		} else {
-			gap = 1;
+			gap = 0.5;
 			rad = 2;
 		}
+		rad = radius ? radius : rad;
 		let pad = 3;
 		let squareSize = (100 - (grid + 1) * gap - pad * 2) / grid; // 8 + 30
 
