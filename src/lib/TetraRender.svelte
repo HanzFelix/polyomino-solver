@@ -1,24 +1,28 @@
 <script>
-	import { onMount } from 'svelte';
+	import { afterUpdate } from 'svelte';
 	import { tetracolors } from '$lib/stores/TetraColors';
 	export let grid = 4;
+	export let radius = 3;
 	export let shape;
 
 	let tetraSVG;
 
-	onMount(() => {
+	afterUpdate(() => {
+		tetraSVG.innerHTML = '';
+
 		let shapeWidth = shape[0].length;
 		let shapeHeight = shape.length;
 		grid = Math.max(shapeHeight, shapeWidth) < grid ? grid : Math.max(shapeHeight, shapeWidth);
 
-		let gap;
+		let gap, rad;
 		if (grid < 5) {
-			gap = 3;
-		} else if (grid < 7) {
 			gap = 2;
+			rad = 3;
 		} else {
-			gap = 1;
+			gap = 0.5;
+			rad = 2;
 		}
+		rad = radius ? radius : rad;
 		let pad = 3;
 		let squareSize = (100 - (grid + 1) * gap - pad * 2) / grid; // 8 + 30
 
@@ -34,7 +38,7 @@
 				square.setAttribute('y', `${rowIndex * (squareSize + gap) + yOffset}%`);
 				square.setAttribute('width', `${squareSize}%`);
 				square.setAttribute('height', `${squareSize}%`);
-				square.setAttribute('rx', '3%');
+				square.setAttribute('rx', `${rad}%`);
 				square.style.fill = $tetracolors[cell]; /*cell != 0 ? shape.color : emptyColor*/ // Set the color
 				shapeGroup.appendChild(square);
 			});
@@ -44,7 +48,7 @@
 	});
 </script>
 
-<div class="pb-[100%] w-full rounded-md box-border relative bg-tbrown-50">
+<div class="pb-[100%] w-full box-border relative bg-tbrown-50" style="border-radius: inherit;">
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		bind:this={tetraSVG}

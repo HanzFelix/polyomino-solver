@@ -38,11 +38,6 @@ function searchPieceCombos(pieceWeights, maxWeight) {
 }
 
 function findCombo(pieceWeights, maxWeight, remWeight, curWeight, curIndex) {
-	// skip oversized combo
-	if (curWeight > maxWeight || curIndex == pieceWeights.length) {
-		return;
-	}
-
 	// already valid combo? add
 	if (curWeight == maxWeight) {
 		combo = curCombo.slice().sort();
@@ -51,6 +46,11 @@ function findCombo(pieceWeights, maxWeight, remWeight, curWeight, curIndex) {
 			foundCombos.add(comboS);
 			postMessage({ state: 'found', combo: combo });
 		}
+		return;
+	}
+
+	// skip oversized combo
+	if (curWeight > maxWeight || curIndex == pieceWeights.length) {
 		return;
 	}
 
