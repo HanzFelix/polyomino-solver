@@ -5,8 +5,8 @@ export default {
 		extend: {
 			colors: {
 				tcyan: {
-					300: '#CED5D5',
-					400: '#9BAAAA',
+					300: '#C5CAD5',
+					400: '#949BAA',
 					900: '#325453'
 				},
 				tbrown: {
