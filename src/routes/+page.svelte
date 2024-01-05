@@ -228,7 +228,7 @@
 	class="container mx-auto flex flex-col md:max-h-screen md:flex-row gap-4 py-8 px-4 md:px-0 h-full"
 >
 	<div class="md:basis-4/12 flex flex-col justify-between bg-tbrown-300 rounded-xl">
-		<div class="flex gap-6 flex-col p-4 bg-tbrown-300 rounded-t-lg md:overflow-y-auto">
+		<div class="flex gap-6 flex-col p-4 md:px-2 bg-tbrown-300 rounded-t-lg md:overflow-y-auto">
 			<section>
 				<div class="flex justify-between mb-2 items-end flex-wrap">
 					<h2 class="text-xl">Board size</h2>
@@ -296,7 +296,7 @@
 						remove_selection
 					</button>
 				</div>
-				<div class="flex overflow-hidden">
+				<div class="flex">
 					<label
 						for="boardx"
 						class="py-2 px-2 text-tbrown-50 bg-tbrown-500 material-symbols-rounded rounded-l-md"
@@ -347,7 +347,7 @@
 			/>
 		</div>
 		<div class="lg:basis-1/4 md:basis-1/3 flex flex-col min-w-48">
-			<div class="flex justify-between items-end gap-2 p-4 md:pl-2">
+			<div class="flex justify-between items-end gap-2 p-4 md:pl-4">
 				<h1 class="font-semibold w-min">Solution{validCombos.length == 1 ? '' : 's'} Found:</h1>
 				<h1 class="text-5xl font-bold cursor-pointer">{validCombos.length}</h1>
 			</div>

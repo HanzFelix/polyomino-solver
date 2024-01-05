@@ -18,7 +18,7 @@ body {
 * {
 	scrollbar-width: thin;
 	scrollbar-color: var(--secondary) var(--primary);
-	scrollbar-gutter: stable;
+	scrollbar-gutter: stable both-edges;
 }
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {

@@ -4,7 +4,7 @@
 </script>
 
 <div
-	class="grid overflow-x-auto py-2 px-4 md:pl-2 md:overflow-x-visible grid-rows-2 md:grid-rows-none md:grid-cols-2 grid-flow-col md:grid-flow-row md:overflow-y-auto gap-4 justify-start"
+	class="grid overflow-x-auto py-2 pr-8 md:pr-0 md:overflow-x-visible grid-rows-2 md:grid-rows-none md:grid-cols-2 grid-flow-col md:grid-flow-row md:overflow-y-auto gap-4 justify-start"
 >
 	{#each solutions as solution}
 		<div class="w-20 md:w-auto rounded-sm">
