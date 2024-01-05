@@ -22,7 +22,7 @@
 		'#5B8EC7',
 		'#59372F',
 		'#47C1A2',
-		'#C46965'
+		'#D499AE'
 	]);
 
 	tetrapieces.init([
@@ -109,7 +109,6 @@
 	}
 
 	// board translations stuff
-	// would prefer the [{x: 0, y:0}] way instead of blockedCells.length
 	function boardifyBlocked() {
 		const board = Array.from({ length: rows }, () => Array(cols).fill(0));
 		let free_space = rows * cols;
@@ -139,8 +138,9 @@
 	let validCombos = [];
 	let pendingValidation = 0;
 	$: workersDone = pendingValidation == 0;
+	$: freeSpace = rows * cols - blockedCount;
 	function findSolutions() {
-		if (workersDone && rows * cols <= $pieceweights) {
+		if (workersDone && freeSpace <= $pieceweights) {
 			hypotheticalCombos = 0;
 			validCombos = [];
 			finalBoard = boardifyBlocked();
@@ -228,7 +228,7 @@
 	class="container mx-auto flex flex-col md:max-h-screen md:flex-row gap-4 py-8 px-4 md:px-0 h-full"
 >
 	<div class="md:basis-4/12 flex flex-col justify-between bg-tbrown-300 rounded-xl">
-		<div class="flex gap-6 flex-col p-4 md:px-2 bg-tbrown-300 rounded-t-lg md:overflow-y-auto">
+		<div class="flex gap-6 flex-col p-4 md:pr-2 bg-tbrown-300 rounded-t-lg md:overflow-y-auto">
 			<section>
 				<div class="flex justify-between mb-2 items-end flex-wrap">
 					<h2 class="text-xl">Board size</h2>
@@ -320,14 +320,12 @@
 			</section>
 		</div>
 		<div class="flex">
-			<p class="bg-tbrown-500 py-2 px-4 text-tbrown-50 basis-full rounded-bl-lg">
-				{workersDone
-					? 'Need: ' + $pieceweights + '/' + (rows * cols - blockedCount)
-					: 'Pending: ' + pendingValidation}
+			<p class="bg-tbrown-500 py-2 px-4 transition-colors text-tbrown-50 basis-full rounded-bl-lg">
+				{workersDone ? 'Need: ' + $pieceweights + '/' + freeSpace : 'Pending: ' + pendingValidation}
 			</p>
 			<button
 				on:click={findSolutions}
-				class="{workersDone && rows * cols <= $pieceweights
+				class="{workersDone && freeSpace <= $pieceweights
 					? 'bg-tcyan-900'
 					: 'bg-tbrown-500'}  font-black py-2 px-4 basis-36 text-left text-tbrown-50 rounded-br-lg"
 			>
