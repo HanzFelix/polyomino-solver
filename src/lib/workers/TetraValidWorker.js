@@ -17,7 +17,7 @@ function solveBoard(pieces, board, combination, comboIndex) {
 		return true;
 	}
 	// iterate thru rotations
-	let pieceRotations = generateRotations(pieces[combination[comboIndex] - 1].shape);
+	let pieceRotations = pieces[combination[comboIndex] - 1].orientations;
 	let minPieceDim = Math.min(pieceRotations[0].length, pieceRotations[0][0].length);
 	for (let row = 0; row <= board.length - minPieceDim; row++) {
 		for (let col = 0; col <= board[0].length - minPieceDim; col++) {
