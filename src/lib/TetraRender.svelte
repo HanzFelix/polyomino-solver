@@ -48,7 +48,11 @@
 	});
 </script>
 
-<div class="pb-[100%] w-full box-border relative bg-tbrown-50" style="border-radius: inherit;">
+<div
+	class="pb-[100%] w-full box-border relative bg-tbrown-50"
+	style="border-radius: inherit;"
+	on:click
+>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		bind:this={tetraSVG}
