@@ -8,7 +8,13 @@
 <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-3 lg:grid-cols-4 gap-4 items-end">
 	{#each pieces as piece}
 		<div class="flex flex-col justify-end gap-1 rounded-t-md">
-			<TetraRender shape={piece.shape} grid={4} />
+			<TetraRender
+				shape={piece.shape}
+				grid={4}
+				on:click={() => {
+					piece.quantity++;
+				}}
+			/>
 			<input
 				type="text"
 				name={'piece' + piece.id}
