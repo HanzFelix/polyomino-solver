@@ -18,27 +18,36 @@
 					tetrapieces.refresh();
 				}}
 			/>
-			<input
-				type="text"
-				name={'piece' + piece.id}
-				size="1"
-				on:focusin={() => {
-					if (piece.quantity == 0) {
-						piece.quantity = '';
-					}
-				}}
-				on:focusout={() => {
-					if (piece.quantity == '') {
+			<div class="flex">
+				<input
+					type="text"
+					name={'piece' + piece.id}
+					size="1"
+					on:focusin={() => {
+						if (piece.quantity == 0) {
+							piece.quantity = '';
+						}
+					}}
+					on:focusout={() => {
+						if (piece.quantity == '') {
+							piece.quantity = 0;
+						}
+						tetrapieces.refresh();
+					}}
+					placeholder="0"
+					bind:value={piece.quantity}
+					class="px-2 flex-1 min-w-1 bg-tbrown-50 rounded-b-md text-center {piece.quantity <= 0
+						? 'text-tbrown-500'
+						: 'text-tbrown-900'}"
+				/>
+				<!--button
+					class="bg-red-500 rounded-br-md"
+					on:click={() => {
 						piece.quantity = 0;
-					}
-					tetrapieces.refresh();
-				}}
-				placeholder="0"
-				bind:value={piece.quantity}
-				class="px-2 basis-full bg-tbrown-50 rounded-b-md text-center {piece.quantity <= 0
-					? 'text-tbrown-500'
-					: 'text-tbrown-900'}"
-			/>
+						tetrapieces.refresh();
+					}}>x</button
+				-->
+			</div>
 		</div>
 	{/each}
 </div>
