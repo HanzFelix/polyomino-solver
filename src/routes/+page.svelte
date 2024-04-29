@@ -144,6 +144,7 @@
 	$: freeSpace = rows * cols - blockedCount;
 	function findSolutions() {
 		if (workersDone && freeSpace <= $pieceweights) {
+			loadWorkers();
 			hypotheticalCombos = 0;
 			validCombos = [];
 			finalBoard = boardifyBlocked();
@@ -152,6 +153,8 @@
 				pieces: $tetrapieces,
 				maxWeight: finalBoard.free_space
 			});
+		} else if (!workersDone) {
+			stopWorkers();
 		}
 	}
 
@@ -173,6 +176,7 @@
 					pendingValidation--;
 					if (!pendingValidation) {
 						showFinishNotif = true;
+						stopWorkers();
 					}
 				}
 			};
@@ -188,14 +192,25 @@
 				pendingValidation--;
 				if (!pendingValidation) {
 					showFinishNotif = true;
+					stopWorkers();
 				}
 			};
 		}
 	}
 
+	function stopWorkers() {
+		comboWorker.terminate();
+		validWorker.terminate();
+
+		comboWorker = undefined;
+		validWorker = undefined;
+
+		hypotheticalCombos = 0;
+		pendingValidation = 0;
+	}
+
 	onMount(() => {
 		updateBoardSize();
-		loadWorkers();
 	});
 </script>
 
@@ -298,17 +313,19 @@
 				<TetraPieceList pieces={$tetrapieces} />
 			</section>
 		</div>
-		<div class="flex">
-			<p class="bg-tbrown-500 py-2 px-4 transition-colors text-tbrown-50 basis-full rounded-bl-lg">
-				{workersDone ? 'Need: ' + $pieceweights + '/' + freeSpace : 'Pending: ' + pendingValidation}
+		<div class="flex bg-tbrown-500 rounded-b-lg text-tbrown-50">
+			<p class="py-2 px-4 transition-colors basis-full">
+				{workersDone
+					? 'Required: ' + $pieceweights + '/' + freeSpace
+					: 'Pending: ' + pendingValidation}
 			</p>
 			<button
 				on:click={findSolutions}
-				class="{workersDone && freeSpace <= $pieceweights
-					? 'bg-tcyan-900'
-					: 'bg-tbrown-500'}  font-black py-2 px-4 basis-36 text-left text-tbrown-50 rounded-br-lg"
+				class="{workersDone ? 'bg-tcyan-900' : 'bg-red-800'} {freeSpace <= $pieceweights
+					? 'bg-opacity-100'
+					: 'bg-opacity-0'} font-black py-2 px-4 basis-36 text-left rounded-br-lg"
 			>
-				{workersDone ? 'START' : 'PROCESSING'}
+				{workersDone ? 'START' : 'ABORT'}
 			</button>
 		</div>
 	</div>
