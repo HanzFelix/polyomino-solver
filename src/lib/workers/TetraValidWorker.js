@@ -71,18 +71,6 @@ function rotatePiece(matrix) {
 	return rotated;
 }
 
-function canPlacePiece(board, piece, row, col) {
-	for (let i = 0; i < piece.length; i++) {
-		for (let j = 0; j < piece[0].length; j++) {
-			if (piece[i][j] && board[row + i][col + j]) {
-				return false;
-			}
-		}
-	}
-
-	return true;
-}
-
 function placePiece(board, piece, row, col) {
 	for (let i = 0; i < piece.length; i++) {
 		for (let j = 0; j < piece[0].length; j++) {
