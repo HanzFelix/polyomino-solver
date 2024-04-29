@@ -5,7 +5,9 @@
 	export let pieces;
 </script>
 
-<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-3 lg:grid-cols-4 gap-4 items-end">
+<div
+	class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-2 lg:gap-x-4 items-end"
+>
 	{#each pieces as piece}
 		<div class="flex flex-col justify-end gap-1 rounded-t-md">
 			<TetraRender
