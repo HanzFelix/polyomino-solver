@@ -40,7 +40,9 @@ function searchPieceCombos(pieceWeights, maxWeight) {
 function findCombo(pieceWeights, maxWeight, remWeight, curWeight, curIndex) {
 	// already valid combo? add
 	if (curWeight == maxWeight) {
-		combo = curCombo.slice().sort();
+		combo = curCombo.slice().sort((a, b) => {
+			return a - b;
+		});
 		comboS = combo.join('-');
 		if (!foundCombos.has(comboS)) {
 			foundCombos.add(comboS);
