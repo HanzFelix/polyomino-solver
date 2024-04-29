@@ -286,12 +286,14 @@
 			<section>
 				<div class="flex justify-between mb-2">
 					<h2 class="text-xl">Pieces</h2>
-					<!--button
-						class="px-2 py-1 rounded-md text-tbrown-50 bg-tcyan-900 opacity-20"
-						on:click={tempAdd}
+					<button
+						class="p-1 rounded-md text-tbrown-50 bg-tcyan-900 material-symbols-rounded"
+						on:click={() => {
+							tetrapieces.resetQuantity();
+						}}
 					>
-						Add +
-					</button-->
+						variable_remove
+					</button>
 				</div>
 				<TetraPieceList pieces={$tetrapieces} />
 			</section>

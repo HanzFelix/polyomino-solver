@@ -35,6 +35,9 @@ function createTetraPieceStore() {
 		refresh: () => {
 			update(($tetrapieces) => $tetrapieces);
 		},
+		resetQuantity: () => {
+			update(($tetrapieces) => $tetrapieces.map((piece) => ({ ...piece, quantity: 0 })));
+		},
 		remove: (id) => {
 			update(($tetrapieces) => $tetrapieces.filter((t) => t.id !== id));
 		}
