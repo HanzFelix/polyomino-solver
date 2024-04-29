@@ -51,7 +51,10 @@
 <div
 	class="pb-[100%] w-full box-border relative bg-tbrown-50"
 	style="border-radius: inherit;"
+	role="button"
+	tabindex="-1"
 	on:click
+	on:keydown
 >
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
