@@ -15,6 +15,7 @@
 				grid={4}
 				on:click={() => {
 					piece.quantity++;
+					tetrapieces.refresh();
 				}}
 			/>
 			<input
