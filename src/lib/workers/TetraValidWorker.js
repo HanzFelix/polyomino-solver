@@ -22,7 +22,7 @@ function solveBoard(pieces, board, combination, comboIndex) {
 	for (let row = 0; row <= board.length - minPieceDim; row++) {
 		for (let col = 0; col <= board[0].length - minPieceDim; col++) {
 			for (const rotated of pieceRotations) {
-				if (piecePlaced(board, rotated, row, col)) {
+				if (piecePlaced(board, rotated, row, col, (comboIndex % 14) + 1)) {
 					// proceed to next piece if successfully placed
 					if (solveBoard(pieces, board, combination, comboIndex + 1)) return true;
 
@@ -98,7 +98,7 @@ function printBoard(board) {
 	console.log();
 }
 
-function piecePlaced(board, piece, row, col) {
+function piecePlaced(board, piece, row, col, pieceIndex) {
 	if (board.length - piece.length - row < 0 || board[0].length - piece[0].length - col < 0)
 		return false;
 
@@ -115,7 +115,7 @@ function piecePlaced(board, piece, row, col) {
 			}
 
 			if (piece[i][j]) {
-				board[row + i][col + j] = piece[i][j];
+				board[row + i][col + j] = pieceIndex;
 			}
 		}
 	}
@@ -125,7 +125,7 @@ function piecePlaced(board, piece, row, col) {
 	// undo placement so far,
 	for (let i = i_r; i >= 0; i--) {
 		for (let j = j_r; j >= 0; j--) {
-			if (piece[i][j] == board[row + i][col + j]) {
+			if (piece[i][j] && board[row + i][col + j]) {
 				board[row + i][col + j] = 0;
 			}
 		}
