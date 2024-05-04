@@ -317,7 +317,9 @@
 				<div class="flex justify-between mb-2">
 					<h2 class="text-xl">Pieces</h2>
 					<button
-						class="p-1 rounded-md text-tbrown-50 bg-tcyan-900 material-symbols-rounded"
+						class="p-1 rounded-md text-tbrown-50 {$pieceweights > 0
+							? 'bg-tcyan-900'
+							: 'bg-tbrown-500'} transition-colors material-symbols-rounded"
 						on:click={() => {
 							tetrapieces.resetQuantity();
 						}}
