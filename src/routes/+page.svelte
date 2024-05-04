@@ -221,6 +221,7 @@
 <div class="container mx-auto flex flex-col md:flex-row gap-4 py-8 px-4 md:px-0 h-full">
 	<div class="md:basis-4/12 flex flex-col justify-between bg-tbrown-300 rounded-xl">
 		<div class="flex gap-6 flex-col p-4 md:pr-2 bg-tbrown-300 rounded-t-lg md:overflow-y-auto">
+			<!-- Title -->
 			<header class="flex justify-between">
 				<h1 class="text-xl font-bold">Polyomino Solver</h1>
 				<a
@@ -242,6 +243,7 @@
 					</svg>
 				</a>
 			</header>
+			<!-- Board size -->
 			<section>
 				<div class="flex justify-between mb-2 items-end flex-wrap">
 					<h2 class="text-xl">Board size</h2>
@@ -297,6 +299,7 @@
 					</div>
 				</div>
 			</section>
+			<!-- Board shape -->
 			<section>
 				<div class="flex justify-between mb-2">
 					<h2 class="text-xl">Board shape</h2>
@@ -319,6 +322,7 @@
 					<p class="basis-full px-2">Optional: Select cells in the board to block</p>
 				</div>
 			</section>
+			<!-- Piece list -->
 			<section>
 				<div class="flex justify-between mb-2">
 					<h2 class="text-xl">Pieces</h2>
@@ -334,6 +338,7 @@
 				<TetraPieceList pieces={$tetrapieces} />
 			</section>
 		</div>
+		<!-- Problem info & worker controls -->
 		<div class="flex bg-tbrown-500 rounded-b-lg text-tbrown-50">
 			<p class="py-2 px-4 transition-colors basis-full">
 				{workersDone
@@ -370,6 +375,7 @@
 		</div>
 	</div>
 </div>
+<!-- Completion notification -->
 <div class="fixed top-0 right-0 flex flex-col gap-2 items-end mt-12 select-none md:pr-2">
 	{#if showFinishNotif}
 		<div
