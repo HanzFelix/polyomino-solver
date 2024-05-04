@@ -47,6 +47,7 @@ function removePiece(board, piece, row, col) {
 }
 
 function piecePlaced(board, piece, row, col, pieceIndex) {
+	// TODO: eliminate redundant dimension check
 	if (board.length - piece.length - row < 0 || board[0].length - piece[0].length - col < 0)
 		return false;
 
@@ -54,7 +55,7 @@ function piecePlaced(board, piece, row, col, pieceIndex) {
 	let i_r, j_r;
 	looprow: for (let i = 0; i < piece.length; i++) {
 		for (let j = 0; j < piece[0].length; j++) {
-			//??
+			// conflicting cell placement?
 			if (piece[i][j] && board[row + i][col + j]) {
 				placeable = false;
 				i_r = i;
@@ -68,6 +69,7 @@ function piecePlaced(board, piece, row, col, pieceIndex) {
 		}
 	}
 
+	// placement successful?
 	if (placeable) return true;
 
 	// undo placement so far,

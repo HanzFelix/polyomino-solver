@@ -7,7 +7,6 @@ onmessage = (event) => {
 	postMessage({ state: 'done', combo: [] });
 };
 
-//pieces stuff
 function tallyPieceWeights(pieces) {
 	const weights = [];
 	for (let i = 0; i < pieces.length; i++) {
@@ -18,7 +17,7 @@ function tallyPieceWeights(pieces) {
 	return weights;
 }
 
-// search combinations from bag (via sum of piece weight == free_space)
+// search combinations from bag (using sum of piece weights == free_space)
 function searchPieceCombos(pieceWeights, maxWeight) {
 	let totalWeight = 0;
 
@@ -37,6 +36,7 @@ function searchPieceCombos(pieceWeights, maxWeight) {
 	findCombo(pieceWeights, maxWeight, totalWeight, 0, 0);
 }
 
+// recursively search for possible set of pieces as solution
 function findCombo(pieceWeights, maxWeight, remWeight, curWeight, curIndex) {
 	// already valid combo? add
 	if (curWeight == maxWeight) {
