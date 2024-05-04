@@ -247,16 +247,6 @@
 			<section>
 				<div class="flex justify-between mb-2 items-end flex-wrap">
 					<h2 class="text-xl">Board size</h2>
-					<!--div
-						class="text-tbrown-50 {isCurrentDims
-							? 'bg-tbrown-500'
-							: 'bg-tcyan-900'} px-2 relative rounded-md flex overflow-hidden transition-colors"
-					>
-						<div class="{isCurrentDims ? 'w-0' : ''} truncate py-1">
-							<button on:click={updateBoardSize}>Update&nbsp;</button>
-						</div>
-						<span class="font-bold py-1">&check;</span>
-					</div-->
 				</div>
 				<div class="flex gap-4">
 					<div class="basis-full flex">
