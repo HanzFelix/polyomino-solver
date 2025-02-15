@@ -2,7 +2,8 @@
 	import { tetrapieces } from '$lib/stores/TetraPieces.js';
 	import TetraRender from '$lib/TetraRender.svelte';
 
-	export let pieces;
+	/** @type {{pieces: any}} */
+	let { pieces } = $props();
 </script>
 
 <div
@@ -23,12 +24,12 @@
 					type="text"
 					name={'piece' + piece.id}
 					size="1"
-					on:focusin={() => {
+					onfocusin={() => {
 						if (piece.quantity == 0) {
 							piece.quantity = '';
 						}
 					}}
-					on:focusout={() => {
+					onfocusout={() => {
 						if (piece.quantity == '') {
 							piece.quantity = 0;
 						}

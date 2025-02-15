@@ -83,15 +83,15 @@
 	]);
 
 	// board stuff
-	let rows = 4,
-		cols = 4,
-		in_rows = 4,
-		in_cols = 4;
+	let rows = $state(4),
+		cols = $state(4),
+		in_rows = $state(4),
+		in_cols = $state(4);
 
-	let blockedCells = [];
-	let blockedCount = 0;
+	let blockedCells = $state([]);
+	let blockedCount = $state(0);
 
-	$: hasBlocked = blockedCells.includes(true);
+	let hasBlocked = $derived(blockedCells.includes(true));
 
 	function updateBoardSize() {
 		in_rows = in_rows < 4 ? 4 : in_rows;
@@ -137,11 +137,11 @@
 	// worker stuff
 	let finalBoard;
 	let hypotheticalCombos = 0;
-	let validCombos = [];
-	let pendingValidation = 0;
-	let showFinishNotif = false;
-	$: workersDone = pendingValidation == 0;
-	$: freeSpace = rows * cols - blockedCount;
+	let validCombos = $state([]);
+	let pendingValidation = $state(0);
+	let showFinishNotif = $state(false);
+	let workersDone = $derived(pendingValidation == 0);
+	let freeSpace = $derived(rows * cols - blockedCount);
 	function findSolutions() {
 		if (workersDone && freeSpace <= $pieceweights) {
 			loadWorkers();
@@ -265,7 +265,7 @@
 							max="12"
 							placeholder="4-12"
 							bind:value={in_cols}
-							on:focusout={updateBoardSize}
+							onfocusout={updateBoardSize}
 						/>
 					</div>
 					<div class="basis-full flex">
@@ -284,7 +284,7 @@
 							max="12"
 							placeholder="4-12"
 							bind:value={in_rows}
-							on:focusout={updateBoardSize}
+							onfocusout={updateBoardSize}
 						/>
 					</div>
 				</div>
@@ -294,7 +294,7 @@
 				<div class="flex justify-between mb-2">
 					<h2 class="text-xl">Board shape</h2>
 					<button
-						on:click={clearBlocked}
+						onclick={clearBlocked}
 						class="p-1 rounded-md text-tbrown-50 {hasBlocked
 							? 'bg-tcyan-900'
 							: 'bg-tbrown-500'} material-symbols-rounded transition-colors"
@@ -320,7 +320,7 @@
 						class="p-1 rounded-md text-tbrown-50 {$pieceweights > 0
 							? 'bg-tcyan-900'
 							: 'bg-tbrown-500'} transition-colors material-symbols-rounded"
-						on:click={() => {
+						onclick={() => {
 							tetrapieces.resetQuantity();
 						}}
 					>
@@ -338,7 +338,7 @@
 					: 'Pending: ' + pendingValidation}
 			</p>
 			<button
-				on:click={findSolutions}
+				onclick={findSolutions}
 				class="{workersDone ? 'bg-tcyan-900' : 'bg-red-800'} {freeSpace <= $pieceweights
 					? 'bg-opacity-100'
 					: 'bg-opacity-0'} font-black py-2 px-4 basis-36 text-left rounded-br-lg"
@@ -374,7 +374,7 @@
 			class=" bg-tbrown-500 text-white px-4 py-4 min-w-48 flex items-center gap-2 rounded-md"
 			in:fly={{ duration: 200, x: '100%', opacity: 0.5, easing: cubicOut }}
 			out:fly={{ delay: 2000, duration: 200, x: '100%', opacity: 0.5, easing: cubicOut }}
-			on:introend={() => {
+			onintroend={() => {
 				showFinishNotif = false;
 			}}
 		>

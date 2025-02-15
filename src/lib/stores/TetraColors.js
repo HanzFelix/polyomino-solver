@@ -1,13 +1,9 @@
 import { writable } from 'svelte/store';
-import tailwindConfig from 'tailwindConfig';
-import resolveConfig from 'tailwindcss/resolveConfig';
-
-const configColors = resolveConfig(tailwindConfig).theme.colors;
 
 function createTetraColorStore() {
 	const tetracolors = {
-		0: configColors.tbrown['50'],
-		X: configColors.tcyan['400']
+		0: 'var(--color-tbrown-50)',
+		X: 'var(--color-tcyan-400)'
 	};
 	let uid = 1;
 
@@ -22,16 +18,16 @@ function createTetraColorStore() {
 			if (initialcolors instanceof Array) {
 				uid = 1;
 				let colors = {
-					0: configColors.tbrown['50'],
-					X: configColors.tcyan['400']
+					0: 'var(--color-tbrown-50)',
+					X: 'var(--color-tcyan-400)'
 				};
 				for (const color of initialcolors) {
 					colors[uid++] = color;
 				}
 				set(colors);
 			} else if (initialcolors instanceof Object) {
-				initialcolors[0] = configColors.tbrown['50'];
-				initialcolors['X'] = configColors.tcyan['400'];
+				initialcolors[0] = 'var(--color-tbrown-50)';
+				initialcolors['X'] = 'var(--color-tcyan-400)';
 				uid = 1 + Object.keys(initialcolors).length;
 				set(initialcolors);
 			} else {

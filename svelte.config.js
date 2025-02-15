@@ -12,8 +12,7 @@ const config = {
 				include: ['/*'],
 				exclude: ['<all>']
 			}
-		}),
-		alias: { tailwindConfig: 'tailwind.config.js' }
+		})
 	},
 	preprocess: vitePreprocess()
 };

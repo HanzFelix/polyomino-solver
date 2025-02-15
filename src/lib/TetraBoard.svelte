@@ -2,9 +2,8 @@
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let board;
-	export let rows;
-	export let cols;
+	/** @type {{board: any, rows: any, cols: any}} */
+	let { board = $bindable(), rows, cols } = $props();
 
 	function updateBlocked(index) {
 		board[index] = !board[index];
@@ -26,7 +25,7 @@
 				class="transition-colors border border-tbrown-50 duration-200 rounded-md aspect-square {blocked
 					? 'bg-tcyan-400'
 					: 'bg-tcyan-300'} "
-				on:click={() => {
+				onclick={() => {
 					updateBlocked(i);
 				}}
 			>
