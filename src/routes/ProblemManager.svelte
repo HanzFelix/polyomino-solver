@@ -1,6 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
-	import TetraBoard from '$lib/Tetraboard.svelte';
+	import TetraBoard from '$lib/TetraBoard.svelte';
 	import { Board } from '$lib/board.svelte';
 	import TetraPieceList from '$lib/TetraPieceList.svelte';
 	import { uid as pieceid, Piece } from '$lib/piece.svelte.js';
