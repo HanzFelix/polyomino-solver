@@ -28,7 +28,7 @@
 
 <dialog
 	bind:this={solutionPreview}
-	class="rounded-lg backdrop:backdrop-brightness-50 bg-tbrown-500 w-full max-w-lg overflow-y-auto"
+	class="rounded-lg backdrop:backdrop-brightness-50 bg-tbrown-500 w-full max-w-lg overflow-y-auto m-auto"
 >
 	<div class="flex justify-end">
 		<button

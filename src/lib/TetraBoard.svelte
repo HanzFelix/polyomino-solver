@@ -1,13 +1,9 @@
 <script>
-	import { createEventDispatcher } from 'svelte';
-	const dispatch = createEventDispatcher();
-
 	/** @type {{board: any, rows: any, cols: any}} */
 	let { board = $bindable(), rows, cols } = $props();
 
 	function updateBlocked(index) {
 		board[index] = !board[index];
-		dispatch('update', { value: board[index] ? 1 : -1 });
 	}
 </script>
 
@@ -22,6 +18,7 @@
 	>
 		{#each board as blocked, i}
 			<button
+				aria-label="click"
 				class="transition-colors border border-tbrown-50 duration-200 rounded-md aspect-square {blocked
 					? 'bg-tcyan-400'
 					: 'bg-tcyan-300'} "

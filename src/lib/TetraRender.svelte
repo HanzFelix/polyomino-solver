@@ -1,14 +1,11 @@
-<!-- @migration-task Error while migrating Svelte code: Can't migrate code with afterUpdate. Please migrate by hand. -->
 <script>
-	import { afterUpdate } from 'svelte';
 	import { tetracolors } from '$lib/stores/TetraColors';
-	export let grid = 4;
-	export let radius = 3;
-	export let shape;
+	import { piece_colors_length } from '$lib/problem.svelte';
 
+	let { onclick, onkeydown, grid = 4, radius = 3, shape } = $props();
 	let tetraSVG;
 
-	afterUpdate(() => {
+	$effect(() => {
 		tetraSVG.innerHTML = '';
 
 		let shapeWidth = shape[0].length;
@@ -40,7 +37,12 @@
 				square.setAttribute('width', `${squareSize}%`);
 				square.setAttribute('height', `${squareSize}%`);
 				square.setAttribute('rx', `${rad}%`);
-				square.style.fill = $tetracolors[cell]; /*cell != 0 ? shape.color : emptyColor*/ // Set the color
+				square.style.fill =
+					cell == 'X'
+						? $tetracolors['X']
+						: $tetracolors[
+								((cell - 1) % piece_colors_length) + 1
+							]; /*cell != 0 ? shape.color : emptyColor*/ // Set the color
 				shapeGroup.appendChild(square);
 			});
 		});
@@ -54,8 +56,8 @@
 	style="border-radius: inherit;"
 	role="button"
 	tabindex="-1"
-	on:click
-	on:keydown
+	{onclick}
+	{onkeydown}
 >
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
