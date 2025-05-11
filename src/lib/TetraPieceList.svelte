@@ -1,21 +1,20 @@
 <script>
-	import { tetrapieces } from '$lib/stores/TetraPieces.js';
 	import TetraRender from '$lib/TetraRender.svelte';
 
-	export let pieces;
+	/** @type {{pieces: any}} */
+	let { pieces } = $props();
 </script>
 
 <div
-	class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-2 lg:gap-x-4 items-end"
+	class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-2 items-end"
 >
 	{#each pieces as piece}
 		<div class="flex flex-col justify-end gap-1 rounded-t-md">
 			<TetraRender
 				shape={piece.shape}
 				grid={4}
-				on:click={() => {
+				onclick={() => {
 					piece.quantity++;
-					tetrapieces.refresh();
 				}}
 			/>
 			<div class="flex">
@@ -23,16 +22,15 @@
 					type="text"
 					name={'piece' + piece.id}
 					size="1"
-					on:focusin={() => {
+					onfocusin={() => {
 						if (piece.quantity == 0) {
 							piece.quantity = '';
 						}
 					}}
-					on:focusout={() => {
+					onfocusout={() => {
 						if (piece.quantity == '') {
 							piece.quantity = 0;
 						}
-						tetrapieces.refresh();
 					}}
 					placeholder="0"
 					bind:value={piece.quantity}

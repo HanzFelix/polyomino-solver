@@ -1,8 +1,9 @@
 <script>
 	import TetraRender from '$lib/TetraRender.svelte';
-	export let solutions;
-	let solutionPreview;
-	let openedSolution = [[]];
+	/** @type {{solutions: any}} */
+	let { solutions } = $props();
+	let solutionPreview = $state();
+	let openedSolution = $state([[]]);
 
 	function previewSolution(index) {
 		openedSolution = solutions[index];
@@ -15,8 +16,8 @@
 >
 	{#each solutions as solution, i}
 		<button
-			class="w-20 md:w-auto rounded-sm"
-			on:click={() => {
+			class="w-20 md:w-auto rounded-xs"
+			onclick={() => {
 				previewSolution(i);
 			}}
 		>
@@ -27,12 +28,12 @@
 
 <dialog
 	bind:this={solutionPreview}
-	class="rounded-lg backdrop:backdrop-brightness-50 bg-tbrown-500 w-full max-w-lg overflow-y-auto"
+	class="rounded-lg backdrop:backdrop-brightness-50 bg-tbrown-500 w-full max-w-lg overflow-y-auto m-auto"
 >
 	<div class="flex justify-end">
 		<button
 			class="material-symbols-rounded font-black text-tbrown-50 bg-tcyan-900 px-8 py-3 mr-2"
-			on:click={() => {
+			onclick={() => {
 				solutionPreview.close();
 			}}>close</button
 		>

@@ -8,8 +8,5 @@ export default defineConfig({
 		fs: {
 			allow: [searchForWorkspaceRoot(process.cwd())]
 		}
-	},
-	optimizeDeps: {
-		include: ['tailwindConfig']
 	}
 });
