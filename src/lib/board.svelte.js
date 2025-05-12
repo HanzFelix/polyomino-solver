@@ -1,6 +1,6 @@
 export class Board {
-	rows = $state(6);
-	cols = $state(6);
+	rows = $state();
+	cols = $state();
 	blocked_cells = $state([]);
 	blocked_count = $derived(this.blocked_cells.reduce((sum, cell) => sum + cell, 0));
 	free_space = $derived(this.rows * this.cols - this.blocked_count);
@@ -36,9 +36,11 @@ export class Board {
 	}
 
 	updateBoardSize(rows, cols) {
-		this.rows = rows;
-		this.cols = cols;
-		this.blocked_cells = new Array(rows * cols).fill(false);
+		let r = Number(rows);
+		let c = Number(cols);
+		this.rows = r;
+		this.cols = c;
+		this.blocked_cells = new Array(r * c).fill(false);
 	}
 
 	clearBlocked() {
