@@ -1,6 +1,6 @@
 export class Board {
-	rows = $state();
-	cols = $state();
+	rows = $state(4);
+	cols = $state(4);
 	blocked_cells = $state([]);
 	blocked_count = $derived(this.blocked_cells.reduce((sum, cell) => sum + cell, 0));
 	free_space = $derived(this.rows * this.cols - this.blocked_count);

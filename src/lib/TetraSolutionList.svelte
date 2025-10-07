@@ -1,7 +1,7 @@
 <script>
 	import TetraRender from '$lib/TetraRender.svelte';
 	/** @type {{solutions: any}} */
-	let { solutions } = $props();
+	let { solutions, piece_colors_length } = $props();
 	let solutionPreview = $state();
 	let openedSolution = $state([[]]);
 
@@ -21,7 +21,7 @@
 				previewSolution(i);
 			}}
 		>
-			<TetraRender shape={solution} grid={4} />
+			<TetraRender shape={solution} grid={4} {piece_colors_length} />
 		</button>
 	{/each}
 </div>
@@ -39,6 +39,6 @@
 		>
 	</div>
 	<div class="rounded-lg aspect-square ml-4 mb-4">
-		<TetraRender shape={openedSolution} radius={1} />
+		<TetraRender shape={openedSolution} radius={1} {piece_colors_length} />
 	</div>
 </dialog>

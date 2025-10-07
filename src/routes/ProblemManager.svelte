@@ -3,20 +3,20 @@
 	import { Board } from '$lib/board.svelte';
 	import TetraPieceList from '$lib/TetraPieceList.svelte';
 	import { uid as pieceid, Piece } from '$lib/piece.svelte.js';
-	import { pieces, board, resetPieceQuantities } from '$lib/problem.svelte.js';
-	import { solve, getSolverStatus, solver } from '$lib/solver.svelte.js';
+
+	let { problem = $bindable(), solver } = $props();
 
 	// board stuff
-	let hasBlocked = $derived(board.blocked_cells.includes(true));
+	let hasBlocked = $derived(problem.board.blocked_cells.includes(true));
 	let pieceweights = $derived(
-		pieces.reduce((sum, piece) => sum + piece.quantity * piece.weight, 0)
+		problem.pieces.reduce((sum, piece) => sum + piece.quantity * piece.weight, 0)
 	);
 
-	let in_rows = $state(board.rows);
-	let in_cols = $state(board.cols);
+	let in_rows = $state(problem.board.rows);
+	let in_cols = $state(problem.board.cols);
 
 	$effect(() => {
-		board.updateBoardSize(in_rows, in_cols);
+		problem.board.updateBoardSize(in_rows, in_cols);
 	});
 
 	let addPieceWindow = $state();
@@ -78,7 +78,7 @@
 
 		//return cropped;
 		console.log(cropped);
-		pieces.push(new Piece(cropped));
+		problem.pieces.push(new Piece(cropped));
 	}
 </script>
 
@@ -166,7 +166,7 @@
 			<div class="flex justify-between mb-2">
 				<h2 class="text-xl">Board shape</h2>
 				<button
-					onclick={() => board.clearBlocked()}
+					onclick={() => problem.board.clearBlocked()}
 					class="p-1 rounded-md text-tbrown-50 {hasBlocked
 						? 'bg-tcyan-900'
 						: 'bg-tbrown-500'} material-symbols-rounded transition-colors"
@@ -201,30 +201,31 @@
 							? 'bg-tcyan-900'
 							: 'bg-tbrown-500'} transition-colors material-symbols-rounded"
 						onclick={() => {
-							resetPieceQuantities();
+							problem.resetPieceQuantities();
 						}}
 					>
 						variable_remove
 					</button>
 				</div>
 			</div>
-			<TetraPieceList {pieces} />
+			<TetraPieceList pieces={problem.pieces} piece_colors_length={problem.piece_colors_length} />
 		</section>
 	</div>
 	<!-- Problem info & worker controls -->
 	<div class="flex bg-tbrown-500 rounded-b-lg text-tbrown-50">
 		<p class="py-2 px-4 transition-colors basis-full">
-			{getSolverStatus()
-				? 'Required: ' + pieceweights + '/' + board.free_space
+			{solver.getSolverStatus()
+				? 'Required: ' + pieceweights + '/' + problem.board.free_space
 				: 'Pending: ' + solver.pending_validation}
 		</p>
 		<button
-			onclick={solve}
-			class="{getSolverStatus() ? 'bg-tcyan-900' : 'bg-red-800'} {board.free_space <= pieceweights
+			onclick={() => solver.solve(problem)}
+			class="{solver.getSolverStatus() ? 'bg-tcyan-900' : 'bg-red-800'} {problem.board.free_space <=
+			pieceweights
 				? ''
 				: 'bg-transparent'} font-black py-2 px-4 basis-36 text-left rounded-br-lg"
 		>
-			{getSolverStatus() ? 'START' : 'ABORT'}
+			{solver.getSolverStatus() ? 'START' : 'ABORT'}
 		</button>
 	</div>
 </div>

@@ -1,6 +1,6 @@
 <script>
 	/** @type {{board: any, rows: any, cols: any}} */
-	let { board = $bindable(), rows, cols } = $props();
+	let { board, rows, cols } = $props();
 
 	function updateBlocked(index) {
 		board[index] = !board[index];
