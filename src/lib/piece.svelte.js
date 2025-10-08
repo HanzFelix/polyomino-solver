@@ -2,14 +2,76 @@ export let uid = 1;
 
 export class Piece {
 	quantity = $state();
+	shape = $derived(this.orientations[0]);
 
 	/** @type {{shape: Array}} */
 	constructor(shape) {
 		this.id = uid++;
-		this.shape = shape;
 		this.quantity = 0;
 		this.weight = shape.reduce((count, row) => count + row.filter((x) => x !== 0).length, 0);
 		this.orientations = generateOrientations(shape);
+	}
+
+	trim() {
+		for (let o = 0; o < this.orientations.length; o++) {
+			const shape = this.orientations[o];
+
+			if (shape.length === 0) return this;
+
+			const rows = shape.length;
+			const cols = shape[0].length;
+
+			// Find top boundary (first row with non-zero)
+			let top = 0;
+			while (top < rows && shape[top].every((val) => val === 0)) {
+				top++;
+			}
+			if (top === rows) return []; // All zeros
+
+			// Find bottom boundary (last row with non-zero)
+			let bottom = rows - 1;
+			while (bottom >= 0 && shape[bottom].every((val) => val === 0)) {
+				bottom--;
+			}
+
+			// Find left boundary (first column with non-zero)
+			let left = 0;
+			while (left < cols) {
+				let hasNonZero = false;
+				for (let i = top; i <= bottom; i++) {
+					if (shape[i][left] !== 0) {
+						hasNonZero = true;
+						break;
+					}
+				}
+				if (hasNonZero) break;
+				left++;
+			}
+
+			// Find right boundary (last column with non-zero)
+			let right = cols - 1;
+			while (right >= 0) {
+				let hasNonZero = false;
+				for (let i = top; i <= bottom; i++) {
+					if (shape[i][right] !== 0) {
+						hasNonZero = true;
+						break;
+					}
+				}
+				if (hasNonZero) break;
+				right--;
+			}
+
+			// Slice the grid to get the cropped array
+			const cropped = [];
+			for (let i = top; i <= bottom; i++) {
+				cropped.push(shape[i].slice(left, right + 1));
+			}
+
+			this.orientations[o] = cropped;
+		}
+
+		return this;
 	}
 }
 

@@ -20,65 +20,11 @@
 	});
 
 	let addPieceWindow = $state();
-	let newPiece = new Board(6, 6);
+	let pieceCreator = new Board(6, 6);
 
-	function convertToPieceShape() {
-		let grid = newPiece.boardifyBlocked(pieceid).board;
-		if (grid.length === 0) return [];
-
-		const rows = grid.length;
-		const cols = grid[0].length;
-
-		// Find top boundary (first row with non-zero)
-		let top = 0;
-		while (top < rows && grid[top].every((val) => val === 0)) {
-			top++;
-		}
-		if (top === rows) return []; // All zeros
-
-		// Find bottom boundary (last row with non-zero)
-		let bottom = rows - 1;
-		while (bottom >= 0 && grid[bottom].every((val) => val === 0)) {
-			bottom--;
-		}
-
-		// Find left boundary (first column with non-zero)
-		let left = 0;
-		while (left < cols) {
-			let hasNonZero = false;
-			for (let i = top; i <= bottom; i++) {
-				if (grid[i][left] !== 0) {
-					hasNonZero = true;
-					break;
-				}
-			}
-			if (hasNonZero) break;
-			left++;
-		}
-
-		// Find right boundary (last column with non-zero)
-		let right = cols - 1;
-		while (right >= 0) {
-			let hasNonZero = false;
-			for (let i = top; i <= bottom; i++) {
-				if (grid[i][right] !== 0) {
-					hasNonZero = true;
-					break;
-				}
-			}
-			if (hasNonZero) break;
-			right--;
-		}
-
-		// Slice the grid to get the cropped array
-		const cropped = [];
-		for (let i = top; i <= bottom; i++) {
-			cropped.push(grid[i].slice(left, right + 1));
-		}
-
-		//return cropped;
-		console.log(cropped);
-		problem.pieces.push(new Piece(cropped));
+	function addPieceToProblem() {
+		const coarseShape = pieceCreator.boardifyBlocked(pieceid);
+		problem.pieces.push(new Piece(coarseShape).trim());
 	}
 </script>
 
@@ -192,7 +138,7 @@
 					<button
 						class="p-1 rounded-md text-tbrown-50 bg-tcyan-900 material-symbols-rounded"
 						onclick={() => {
-							newPiece.updateBoardSize(6, 6);
+							pieceCreator.updateBoardSize(6, 6);
 							addPieceWindow.showModal();
 						}}>add</button
 					>
@@ -244,13 +190,17 @@
 		>
 	</div>
 	<div class="rounded-lg">
-		<TetraBoard bind:board={newPiece.blocked_cells} rows={newPiece.rows} cols={newPiece.cols} />
+		<TetraBoard
+			bind:board={pieceCreator.blocked_cells}
+			rows={pieceCreator.rows}
+			cols={pieceCreator.cols}
+		/>
 	</div>
 	<div class="flex justify-end px-8 items-center">
 		<button
 			class="material-symbols-rounded font-black text-tbrown-50 bg-tcyan-900 px-6 py-2 items-center"
 			onclick={() => {
-				convertToPieceShape();
+				addPieceToProblem();
 				addPieceWindow.close();
 			}}>check</button
 		>
