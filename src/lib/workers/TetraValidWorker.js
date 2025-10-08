@@ -4,8 +4,8 @@ onmessage = (event) => {
 };
 
 function validateCombination(tetraBag, tetraBoard, combination) {
-	if (solveBoard(tetraBag, tetraBoard.board, combination, 0)) {
-		postMessage({ state: 'found', result: tetraBoard.board });
+	if (solveBoard(tetraBag, tetraBoard, combination, 0)) {
+		postMessage({ state: 'found', result: tetraBoard });
 	} else {
 		postMessage({ state: 'done', result: [] });
 	}

@@ -2,12 +2,11 @@
 	import TetraSolutionList from '$lib/TetraSolutionList.svelte';
 	import TetraBoard from '$lib/TetraBoard.svelte';
 	import { tetracolors } from '$lib/stores/TetraColors.js';
-	import { tetrapieces, pieceweights } from '$lib/stores/TetraPieces.js';
-	import { board } from '$lib/problem.svelte.js';
 	import { fly } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import ProblemManager from './ProblemManager.svelte';
-	import { solver } from '$lib/solver.svelte.js';
+	import { Solver } from '$lib/solver.svelte.js';
+	import { Problem } from '$lib/problem.svelte';
 
 	tetracolors.init([
 		'#8862B2',
@@ -25,6 +24,9 @@
 		'#47C1A2',
 		'#D499AE'
 	]);
+
+	const problem = new Problem();
+	const solver = new Solver();
 </script>
 
 <svelte:head>
@@ -32,10 +34,14 @@
 	<meta name="description" content="Tetra Solver" />
 </svelte:head>
 <div class="container mx-auto flex flex-col md:flex-row gap-4 py-8 px-4 md:px-0 h-full">
-	<ProblemManager />
+	<ProblemManager {problem} {solver} />
 	<div class="bg-tbrown-300 md:basis-8/12 rounded-lg flex flex-col-reverse md:flex-row">
 		<div class="md:self-center p-4 w-full">
-			<TetraBoard rows={board.rows} cols={board.cols} bind:board={board.blocked_cells} />
+			<TetraBoard
+				rows={problem.board.rows}
+				cols={problem.board.cols}
+				bind:board={problem.board.blocked_cells}
+			/>
 		</div>
 		<div class="lg:basis-1/4 md:basis-1/3 flex flex-col min-w-48">
 			<div class="flex justify-between items-end gap-2 p-4 md:pl-4">
@@ -44,7 +50,10 @@
 				</h1>
 				<h1 class="text-5xl font-bold">{solver.solutions.length}</h1>
 			</div>
-			<TetraSolutionList bind:solutions={solver.solutions} />
+			<TetraSolutionList
+				solutions={solver.solutions}
+				piece_colors_length={problem.piece_colors_length}
+			/>
 		</div>
 	</div>
 </div>

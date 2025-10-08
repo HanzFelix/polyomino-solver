@@ -2,7 +2,7 @@
 	import TetraRender from '$lib/TetraRender.svelte';
 
 	/** @type {{pieces: any}} */
-	let { pieces } = $props();
+	let { pieces, piece_colors_length } = $props();
 </script>
 
 <div
@@ -11,6 +11,7 @@
 	{#each pieces as piece}
 		<div class="flex flex-col justify-end gap-1 rounded-t-md">
 			<TetraRender
+				{piece_colors_length}
 				shape={piece.shape}
 				grid={4}
 				onclick={() => {

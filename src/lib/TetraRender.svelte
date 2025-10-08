@@ -1,8 +1,7 @@
 <script>
 	import { tetracolors } from '$lib/stores/TetraColors';
-	import { piece_colors_length } from '$lib/problem.svelte';
 
-	let { onclick, onkeydown, grid = 4, radius = 3, shape } = $props();
+	let { onclick, onkeydown, grid = 4, radius = 3, shape, piece_colors_length } = $props();
 	let tetraSVG;
 
 	$effect(() => {
