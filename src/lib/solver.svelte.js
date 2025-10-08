@@ -21,7 +21,7 @@ export class Solver {
 			this.#comboWorker.postMessage({
 				// TODO: safely remove $state from Piece object
 				pieces: problem.getPlainPieces(),
-				maxWeight: this.#finalBoard.free_space
+				maxWeight: problem.board.free_space
 			});
 		} else if (!getSolverStatus()) {
 			this.#stopWorkers();

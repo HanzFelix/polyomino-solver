@@ -14,7 +14,6 @@ export class Board {
 		let r = this.rows;
 		let c = this.cols;
 		const board = Array.from({ length: r }, () => Array(c).fill(0));
-		let free_space = r * c; // remove if not needed
 
 		for (let index = 0; index < this.blocked_cells.length; index++) {
 			if (this.blocked_cells[index]) {
@@ -28,11 +27,10 @@ export class Board {
 					j = index % c;
 					board[i][j] = cell_value;
 				}
-				free_space--;
 			}
 		}
 
-		return { board: board, free_space: free_space };
+		return board;
 	}
 
 	updateBoardSize(rows, cols) {
