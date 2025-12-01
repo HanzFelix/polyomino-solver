@@ -2,7 +2,7 @@
 
 [![Website](https://img.shields.io/badge/Website-polyomino--solver.pages.dev-blue.svg)](https://polyomino-solver.pages.dev/)
 
-An interactive, browser-based tool for solving and visualizing polyomino tiling puzzles. It provides all possible puzzle solutions, given a set of polyomino pieces to be placed in a board.
+An interactive, browser-based tool for solving and visualizing polyomino tiling puzzles written primarily in JavaScript. It provides all possible puzzle solutions, given a set of polyomino pieces to be placed in a board.
 
 ## Features
 
