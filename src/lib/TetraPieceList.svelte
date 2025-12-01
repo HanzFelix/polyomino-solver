@@ -8,12 +8,13 @@
 <div
 	class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-2 items-end"
 >
-	{#each pieces as piece}
+	{#each pieces as piece, i}
 		<div class="flex flex-col justify-end gap-1 rounded-t-md">
 			<TetraRender
 				{piece_colors_length}
 				shape={piece.shape}
 				grid={4}
+				title={`piece-${i}`}
 				onclick={() => {
 					piece.quantity++;
 				}}

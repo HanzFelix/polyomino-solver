@@ -41,6 +41,12 @@ export class Board {
 		this.blocked_cells = new Array(r * c).fill(false);
 	}
 
+	toggleBlockedCell(index, value = undefined) {
+		const i = index < 0 ? this.blocked_cells.length - index : index;
+		const initial_state = this.blocked_cells[index];
+		this.blocked_cells[index] = typeof value === undefined ? !initial_state : value;
+	}
+
 	clearBlocked() {
 		this.blocked_cells = this.blocked_cells.fill(false);
 	}

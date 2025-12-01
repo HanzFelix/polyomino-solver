@@ -1,7 +1,7 @@
 <script>
 	import { tetracolors } from '$lib/stores/TetraColors';
 
-	let { onclick, onkeydown, grid = 4, radius = 3, shape, piece_colors_length } = $props();
+	let { onclick, onkeydown, grid = 4, radius = 3, shape, piece_colors_length, title } = $props();
 	let tetraSVG;
 
 	$effect(() => {
@@ -55,6 +55,7 @@
 	style="border-radius: inherit;"
 	role="button"
 	tabindex="-1"
+	{title}
 	{onclick}
 	{onkeydown}
 >
