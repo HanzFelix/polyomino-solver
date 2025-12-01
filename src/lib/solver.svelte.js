@@ -23,7 +23,7 @@ export class Solver {
 				pieces: problem.getPlainPieces(),
 				maxWeight: problem.board.free_space
 			});
-		} else if (!getSolverStatus()) {
+		} else if (!this.getSolverStatus()) {
 			this.#stopWorkers();
 		}
 	}
