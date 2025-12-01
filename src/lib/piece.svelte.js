@@ -1,7 +1,7 @@
 export let uid = 1;
 
 export class Piece {
-	quantity = $state();
+	quantity = $state(0);
 	shape = $derived(this.orientations[0]);
 
 	/** @type {{shape: Array}} */
@@ -9,7 +9,7 @@ export class Piece {
 		this.id = uid++;
 		this.quantity = 0;
 		this.weight = shape.reduce((count, row) => count + row.filter((x) => x !== 0).length, 0);
-		this.orientations = generateOrientations(shape);
+		this.orientations = this.#generateOrientations(shape);
 	}
 
 	trim() {
@@ -73,39 +73,39 @@ export class Piece {
 
 		return this;
 	}
-}
 
-function generateOrientations(piece) {
-	const rotations = [];
-	const rotationSet = new Set();
-	let currentPiece = piece;
+	#generateOrientations(piece) {
+		const rotations = [];
+		const rotationSet = new Set();
+		let currentPiece = piece;
 
-	for (let i = 0; i < 4; i++) {
-		// Convert to string
-		const rotationS = JSON.stringify(currentPiece);
+		for (let i = 0; i < 4; i++) {
+			// Convert to string
+			const rotationS = JSON.stringify(currentPiece);
 
-		// Add unique shape
-		if (!rotationSet.has(rotationS)) {
-			rotations.push(currentPiece);
-			rotationSet.add(rotationS);
+			// Add unique shape
+			if (!rotationSet.has(rotationS)) {
+				rotations.push(currentPiece);
+				rotationSet.add(rotationS);
+			}
+
+			currentPiece = this.#rotatePiece(currentPiece);
 		}
-
-		currentPiece = rotatePiece(currentPiece);
-	}
-	return rotations;
-}
-
-function rotatePiece(matrix) {
-	const rows = matrix.length;
-	const cols = matrix[0].length;
-	const rotated = [];
-
-	for (let j = 0; j < cols; j++) {
-		rotated.push([]);
-		for (let i = rows - 1; i >= 0; i--) {
-			rotated[j].push(matrix[i][j]);
-		}
+		return rotations;
 	}
 
-	return rotated;
+	#rotatePiece(matrix) {
+		const rows = matrix.length;
+		const cols = matrix[0].length;
+		const rotated = [];
+
+		for (let j = 0; j < cols; j++) {
+			rotated.push([]);
+			for (let i = rows - 1; i >= 0; i--) {
+				rotated[j].push(matrix[i][j]);
+			}
+		}
+
+		return rotated;
+	}
 }

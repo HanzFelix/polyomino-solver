@@ -2,9 +2,14 @@ import { Board } from './board.svelte';
 import { Piece } from './piece.svelte';
 
 export class Problem {
-	pieces = $state(this.initializePieces());
-	board = new Board();
-	piece_colors_length = $state(14); // TODO: get number from tetracolors
+	pieces = $state([]);
+	piece_colors_length = $state(0); // TODO: get number from tetracolors
+
+	constructor() {
+		this.pieces = this.initializePieces();
+		this.piece_colors_length = 14;
+		this.board = new Board();
+	}
 
 	initializePieces() {
 		return [
@@ -61,6 +66,10 @@ export class Problem {
 			new Piece([[13, 13]]),
 			new Piece([[14]])
 		];
+	}
+
+	setQuantity(index, quantity) {
+		this.pieces.at(index).quantity = quantity;
 	}
 
 	getTotalPieceWeights() {
