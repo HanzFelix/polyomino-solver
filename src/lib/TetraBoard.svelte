@@ -18,7 +18,7 @@
 	>
 		{#each board as blocked, i}
 			<button
-				aria-label="click"
+				aria-label={`cell-${i}`}
 				class="transition-colors border border-tbrown-50 duration-200 rounded-md aspect-square {blocked
 					? 'bg-tcyan-400'
 					: 'bg-tcyan-300'} "
