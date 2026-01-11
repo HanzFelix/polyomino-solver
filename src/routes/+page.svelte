@@ -33,7 +33,7 @@
 	<title>Polyomino Solver</title>
 	<meta name="description" content="Tetra Solver" />
 </svelte:head>
-<div class="container mx-auto flex flex-col md:flex-row gap-4 py-8 px-4 md:px-0 h-full">
+<main class="container mx-auto flex flex-col md:flex-row gap-4 py-8 px-4 md:px-0 h-full">
 	<ProblemManager {problem} {solver} />
 	<div class="bg-tbrown-300 md:basis-8/12 rounded-lg flex flex-col-reverse md:flex-row">
 		<div class="md:self-center p-4 w-full">
@@ -56,7 +56,7 @@
 			/>
 		</div>
 	</div>
-</div>
+</main>
 <!-- Completion notification -->
 <div class="fixed top-0 right-0 flex flex-col gap-2 items-end mt-12 select-none md:pr-2">
 	{#if solver.just_finished}
