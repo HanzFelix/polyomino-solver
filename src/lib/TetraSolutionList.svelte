@@ -16,6 +16,7 @@
 >
 	{#each solutions as solution, i}
 		<button
+			title="Solution"
 			class="w-20 md:w-auto rounded-xs"
 			onclick={() => {
 				previewSolution(i);

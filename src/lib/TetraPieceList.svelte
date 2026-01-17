@@ -23,6 +23,7 @@
 				<input
 					type="text"
 					name={'piece' + piece.id}
+					aria-label={'piece' + piece.id}
 					size="1"
 					onfocusin={() => {
 						if (piece.quantity == 0) {

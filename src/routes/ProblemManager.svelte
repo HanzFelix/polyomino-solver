@@ -74,6 +74,7 @@
 						}}
 						type="number"
 						name="boardx"
+						aria-label="boardx"
 						class="basis-full px-2 bg-tbrown-50 rounded-r-md"
 						size="1"
 						min="4"
@@ -92,6 +93,7 @@
 					<input
 						type="number"
 						name="boardy"
+						aria-label="boardy"
 						class="px-2 basis-full bg-tbrown-50 rounded-r-md"
 						size="1"
 						min="4"
