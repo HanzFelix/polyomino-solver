@@ -8,7 +8,7 @@
 </script>
 
 <div
-	class="md:max-w-md md:max-h-[28rem] m-auto bg-tbrown-50 aspect-square flex flex-col justify-center rounded-lg"
+	class="md:max-w-md md:max-h-112 m-auto bg-tbrown-50 aspect-square flex flex-col justify-center rounded-lg"
 >
 	<div
 		class="grid rounded-lg
