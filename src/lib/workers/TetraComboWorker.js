@@ -14,7 +14,7 @@ function tallyPieceWeights(pieces) {
 			weights.push({ id: pieces[i].id, weight: pieces[i].weight });
 		}
 	}
-	return weights;
+	return weights.sort((a, b) => b.weight - a.weight);
 }
 
 // search combinations from bag (using sum of piece weights == free_space)
@@ -40,6 +40,7 @@ function searchPieceCombos(pieceWeights, maxWeight) {
 function findCombo(pieceWeights, maxWeight, remWeight, curWeight, curIndex) {
 	// already valid combo? add
 	if (curWeight == maxWeight) {
+		// TODO: verify if redundant sort()?
 		combo = curCombo.slice().sort((a, b) => {
 			return a - b;
 		});
