@@ -8,7 +8,7 @@
 <div
 	class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-2 items-end"
 >
-	{#each pieces as piece, i}
+	{#each pieces as piece, i (piece.id)}
 		<div class="flex flex-col justify-end gap-1 rounded-t-md">
 			<TetraRender
 				{piece_colors_length}
