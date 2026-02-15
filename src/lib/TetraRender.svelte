@@ -1,8 +1,22 @@
-<script>
-	import { tetracolors } from '$lib/stores/TetraColors';
+<script lang="ts">
+	import { polyominoConfig } from './config.svelte';
+	import type { HTMLAttributes } from 'svelte/elements';
 
-	let { onclick, onkeydown, grid = 4, radius = 3, shape, piece_colors_length, title } = $props();
-	let tetraSVG;
+	interface PolyominoSVGProps extends HTMLAttributes<HTMLDivElement> {
+		grid: number;
+		shape: Array<Array<number | string>>;
+		radius: number;
+		piece_colors_length: number;
+	}
+
+	let {
+		grid = 4,
+		radius = 3,
+		shape,
+		piece_colors_length,
+		...rest
+	}: PolyominoSVGProps = $props();
+	let tetraSVG: SVGElement;
 
 	$effect(() => {
 		tetraSVG.innerHTML = '';
@@ -38,9 +52,9 @@
 				square.setAttribute('rx', `${rad}%`);
 				square.style.fill =
 					cell == 'X'
-						? $tetracolors['X']
-						: $tetracolors[
-								((cell - 1) % piece_colors_length) + 1
+						? polyominoConfig.colors['X']
+						: polyominoConfig.colors[
+								((Number(cell) - 1) % piece_colors_length) + 1
 							]; /*cell != 0 ? shape.color : emptyColor*/ // Set the color
 				shapeGroup.appendChild(square);
 			});
@@ -55,9 +69,7 @@
 	style="border-radius: inherit;"
 	role="button"
 	tabindex="-1"
-	{title}
-	{onclick}
-	{onkeydown}
+	{...rest}
 >
 	<svg
 		xmlns="http://www.w3.org/2000/svg"

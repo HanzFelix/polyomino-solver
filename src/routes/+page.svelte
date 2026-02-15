@@ -1,14 +1,14 @@
 <script>
 	import TetraSolutionList from '$lib/TetraSolutionList.svelte';
 	import TetraBoard from '$lib/TetraBoard.svelte';
-	import { tetracolors } from '$lib/stores/TetraColors.js';
 	import { fly } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import ProblemManager from './ProblemManager.svelte';
 	import { Solver } from '$lib/solver.svelte.js';
 	import { Problem } from '$lib/problem.svelte';
+	import { polyominoConfig } from '$lib/config.svelte';
 
-	tetracolors.init([
+	polyominoConfig.setColors([
 		'#8862B2',
 		'#538076',
 		'#67BF6A',
