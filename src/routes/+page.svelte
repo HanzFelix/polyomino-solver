@@ -43,7 +43,7 @@
 				bind:board={problem.board.blocked_cells}
 			/>
 		</div>
-		<div class="lg:basis-1/4 md:basis-1/3 flex flex-col min-w-48">
+		<div class="lg:basis-1/4 md:basis-1/3 flex flex-col min-w-48 overflow-clip">
 			<div class="flex justify-between items-end gap-2 p-4 md:pl-4">
 				<h1 class="font-semibold w-min">
 					Solution{solver.solutions.length == 1 ? '' : 's'} Found:

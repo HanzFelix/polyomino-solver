@@ -12,7 +12,7 @@
 </script>
 
 <div
-	class="grid overflow-x-auto py-2 pr-8 pl-4 md:pr-0 md:overflow-x-visible grid-rows-2 md:grid-rows-none md:grid-cols-2 grid-flow-col md:grid-flow-row md:overflow-y-auto gap-4 justify-start"
+	class="grid overflow-x-auto py-2 px-4 md:pr-2 md:overflow-x-visible grid-rows-2 md:grid-rows-none md:grid-cols-2 grid-flow-col md:grid-flow-row md:overflow-y-auto gap-4 justify-start"
 >
 	{#each solutions as solution, i (solution)}
 		<button
@@ -29,17 +29,17 @@
 
 <dialog
 	bind:this={solutionPreview}
-	class="rounded-lg backdrop:backdrop-brightness-50 bg-tbrown-500 w-full max-w-lg overflow-y-auto m-auto"
+	class="rounded-lg backdrop:backdrop-brightness-40 bg-tbrown-900 w-full max-w-lg overflow-y-auto m-auto p-4 pt-0"
 >
-	<div class="flex justify-end">
+	<div class="flex justify-end px-2">
 		<button
-			class="material-symbols-rounded font-black text-tbrown-50 bg-tcyan-900 px-8 py-3 mr-2"
+			class="material-symbols-rounded font-black text-tbrown-50 bg-red-800 px-8 py-2"
 			onclick={() => {
 				solutionPreview.close();
 			}}>close</button
 		>
 	</div>
-	<div class="rounded-lg aspect-square ml-4 mb-4">
+	<div class="rounded-lg aspect-square">
 		<TetraRender shape={openedSolution} radius={1} {piece_colors_length} />
 	</div>
 </dialog>

@@ -28,7 +28,7 @@
 	}
 </script>
 
-<div class="md:basis-4/12 flex flex-col justify-between bg-tbrown-300 rounded-xl">
+<div class="md:basis-4/12 flex flex-col justify-between bg-tbrown-300 rounded-xl overflow-clip">
 	<div class="flex gap-6 flex-col p-4 md:pr-2 bg-tbrown-300 rounded-t-lg md:overflow-y-auto">
 		<!-- Title -->
 		<header class="flex justify-between">
@@ -58,8 +58,8 @@
 			<div class="flex justify-between mb-2 items-end flex-wrap">
 				<h2 class="text-xl">Board size</h2>
 			</div>
-			<div class="flex gap-4">
-				<div class="basis-full flex">
+			<div class="flex gap-4 flex-wrap">
+				<div class="grow flex">
 					<label
 						for="boardx"
 						class="py-1 px-2 font-black text-tbrown-50 bg-tbrown-500 rounded-l-md"
@@ -75,7 +75,7 @@
 						type="number"
 						name="boardx"
 						aria-label="boardx"
-						class="basis-full px-2 bg-tbrown-50 rounded-r-md"
+						class="grow pl-2 bg-tbrown-50 rounded-r-md w-0"
 						size="1"
 						min="4"
 						max="12"
@@ -83,7 +83,7 @@
 						bind:value={in_cols}
 					/>
 				</div>
-				<div class="basis-full flex">
+				<div class="grow flex">
 					<label
 						for="boardy"
 						class="py-1 px-2 font-black text-tbrown-50 bg-tbrown-500 rounded-l-md"
@@ -94,7 +94,7 @@
 						type="number"
 						name="boardy"
 						aria-label="boardy"
-						class="px-2 basis-full bg-tbrown-50 rounded-r-md"
+						class="pl-2 grow bg-tbrown-50 rounded-r-md w-0"
 						size="1"
 						min="4"
 						max="12"

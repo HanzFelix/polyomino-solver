@@ -43,7 +43,6 @@ body {
 * {
 	scrollbar-width: thin;
 	scrollbar-color: var(--secondary) var(--primary);
-	scrollbar-gutter: stable;
 }
 html {
 	scrollbar-gutter: auto;
