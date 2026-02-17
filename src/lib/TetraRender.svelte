@@ -7,6 +7,7 @@
 		shape: Array<Array<number | string>>;
 		radius: number;
 		piece_colors_length: number;
+		fill?: boolean;
 	}
 
 	let {
@@ -14,6 +15,7 @@
 		radius = 3,
 		shape,
 		piece_colors_length,
+		fill = false,
 		...rest
 	}: PolyominoSVGProps = $props();
 	let tetraSVG: SVGElement;
@@ -21,27 +23,33 @@
 	$effect(() => {
 		tetraSVG.innerHTML = '';
 
-		let shapeWidth = shape[0].length;
-		let shapeHeight = shape.length;
-		grid = Math.max(shapeHeight, shapeWidth) < grid ? grid : Math.max(shapeHeight, shapeWidth);
+		const shapeWidth = shape[0].length;
+		const shapeHeight = shape.length;
+		const shapeMaxDim = Math.max(shapeHeight, shapeWidth);
+		grid = shapeMaxDim < grid ? grid : shapeMaxDim;
 
-		let gap, rad;
-		if (grid < 5) {
-			gap = 2;
-			rad = 3;
-		} else {
-			gap = 0.5;
-			rad = 2;
-		}
-		rad = radius ? radius : rad;
-		let pad = 3;
-		let squareSize = (100 - (grid + 1) * gap - pad * 2) / grid; // 8 + 30
+		const gap = grid < 5 ? 2 : 0.5;
+		const rad = grid < 5 ? 2 : grid < 8 ? 1 : 0;
+
+		const pad = 3;
+		const squareSize = (100 - (grid + 1) * gap - pad * 2) / grid; // 8 + 30
 
 		const xOffset =
 			gap * ((grid - shapeWidth) / 2 + 1) + squareSize * ((grid - shapeWidth) / 2) + pad;
 		const yOffset =
 			gap * ((grid - shapeHeight) / 2 + 1) + squareSize * ((grid - shapeHeight) / 2) + pad;
 		const shapeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+		if (fill) {
+			const blackrect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+			blackrect.setAttribute('x', `${xOffset - (pad - 1) / 2}%`);
+			blackrect.setAttribute('y', `${yOffset - (pad - 1) / 2}%`);
+			blackrect.setAttribute('width', `${100 - xOffset * 2 + pad - 1}%`);
+			blackrect.setAttribute('height', `${100 - yOffset * 2 + pad - 1}%`);
+			blackrect.setAttribute('rx', `${rad + 1}%`);
+			blackrect.style.fill = 'black';
+			blackrect.style.opacity = '75%';
+			shapeGroup.appendChild(blackrect);
+		}
 		shape.forEach((row, rowIndex) => {
 			row.forEach((cell, colIndex) => {
 				const square = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -65,7 +73,7 @@
 </script>
 
 <div
-	class="pb-[100%] w-full box-border relative bg-tbrown-50"
+	class={['pb-[100%] w-full box-border relative', fill ? 'bg-tbrown-500' : 'bg-tbrown-50']}
 	style="border-radius: inherit;"
 	role="button"
 	tabindex="-1"

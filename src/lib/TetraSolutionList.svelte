@@ -40,6 +40,6 @@
 		>
 	</div>
 	<div class="rounded-lg aspect-square">
-		<TetraRender shape={openedSolution} radius={1} {piece_colors_length} />
+		<TetraRender shape={openedSolution} radius={1} {piece_colors_length} grid={8} fill={true} />
 	</div>
 </dialog>
