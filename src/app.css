@@ -59,3 +59,7 @@ html {
 	border: 0.25rem solid rgba(0, 0, 0, 0);
 	background-clip: padding-box;
 }
+
+button:hover {
+	cursor: pointer;
+}
