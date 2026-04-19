@@ -31,7 +31,6 @@
 
 <svelte:head>
 	<title>Polyomino Solver</title>
-	<meta name="description" content="Tetra Solver" />
 </svelte:head>
 <main class="container mx-auto flex flex-col md:flex-row gap-4 py-8 px-4 md:px-0 h-full">
 	<ProblemManager {problem} {solver} />
