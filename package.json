@@ -28,7 +28,7 @@
 		"prettier-plugin-svelte": "^3.4.1",
 		"prettier-plugin-tailwindcss": "^0.6.14",
 		"svelte": "^5.49.2",
-		"tailwindcss": "^4.1.18",
+		"tailwindcss": "^4.3.2",
 		"vite": "^6.4.1",
 		"vite-plugin-devtools-json": "^0.1.1"
 	},
