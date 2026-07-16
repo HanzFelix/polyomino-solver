@@ -20,6 +20,7 @@
 		"@sveltejs/vite-plugin-svelte": "^4.0.4",
 		"@tailwindcss/postcss": "^4.1.18",
 		"@types/eslint": "8.56.0",
+		"@vite-pwa/sveltekit": "^1.1.0",
 		"eslint": "^9.39.2",
 		"eslint-config-prettier": "^9.1.2",
 		"eslint-plugin-svelte": "^2.46.1",
