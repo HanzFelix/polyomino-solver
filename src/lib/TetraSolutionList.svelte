@@ -12,7 +12,7 @@
 </script>
 
 <div
-	class="grid overflow-x-auto py-2 px-4 md:pr-2 md:overflow-x-visible grid-rows-2 md:grid-rows-none md:grid-cols-2 grid-flow-col md:grid-flow-row md:overflow-y-auto gap-4 justify-start"
+	class="grid overflow-x-auto py-2 px-4 md:pr-2 md:overflow-x-visible grid-rows-2 md:grid-rows-none md:grid-cols-2 grid-flow-col md:grid-flow-row md:overflow-y-auto gap-4 justify-start scrollbar-gutter-stable"
 >
 	{#each solutions as solution, i (solution)}
 		<button

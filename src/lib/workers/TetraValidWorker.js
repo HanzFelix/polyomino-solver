@@ -22,7 +22,7 @@ function solveBoard(pieces, board, combination, comboIndex) {
 	for (let row = 0; row <= board.length - minPieceDim; row++) {
 		for (let col = 0; col <= board[0].length - minPieceDim; col++) {
 			for (const rotated of pieceRotations) {
-				if (piecePlaced(board, rotated, row, col, (comboIndex % 14) + 1)) {
+				if (piecePlaced(board, rotated, row, col, comboIndex)) {
 					// proceed to next piece if successfully placed
 					if (solveBoard(pieces, board, combination, comboIndex + 1)) return true;
 
@@ -64,7 +64,7 @@ function piecePlaced(board, piece, row, col, pieceIndex) {
 			}
 
 			if (piece[i][j]) {
-				board[row + i][col + j] = pieceIndex;
+				board[row + i][col + j] = (pieceIndex % 14) + 1;
 			}
 		}
 	}
