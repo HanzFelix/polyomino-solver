@@ -1,15 +1,28 @@
 <script>
 	import TetraRender from '$lib/TetraRender.svelte';
 
-	/** @type {{pieces: any}} */
-	let { pieces, piece_colors_length } = $props();
+	/** @type {{pieces: any, piece_colors_length: number, deleteMode?: boolean, onDeletePiece?: (piece: any) => void}} */
+	let { pieces, piece_colors_length, deleteMode = false, onDeletePiece } = $props();
 </script>
 
 <div
 	class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-2 items-end"
 >
 	{#each pieces as piece, i (piece.id)}
-		<div class="flex flex-col justify-end gap-1 rounded-t-md">
+		<div class="relative flex flex-col justify-end gap-1 rounded-t-md">
+			{#if deleteMode}
+				<button
+					type="button"
+					aria-label={`delete piece ${i}`}
+					class="absolute right-1 top-1 z-10 rounded-full bg-red-800 px-2 py-1 text-xs font-black text-tbrown-50"
+					onclick={(event) => {
+						event.stopPropagation();
+						onDeletePiece?.(piece);
+					}}
+				>
+					×
+				</button>
+			{/if}
 			<TetraRender
 				{piece_colors_length}
 				shape={piece.shape}

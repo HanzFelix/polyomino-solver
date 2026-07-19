@@ -21,10 +21,15 @@
 
 	let addPieceWindow = $state();
 	let pieceCreator = new Board(6, 6);
+	let deleteMode = $state(false);
 
 	function addPieceToProblem() {
 		const coarseShape = pieceCreator.boardifyBlocked(pieceid);
 		problem.pieces.push(new Piece(coarseShape).trim());
+	}
+
+	function removePieceFromProblem(piece) {
+		problem.pieces = problem.pieces.filter((candidate) => candidate.id !== piece.id);
 	}
 </script>
 
@@ -138,6 +143,17 @@
 				<h2 class="text-xl">Pieces</h2>
 				<div class="flex gap-1">
 					<button
+						aria-label={deleteMode ? 'disable delete mode' : 'enable delete mode'}
+						class="p-1 rounded-md text-tbrown-50 {deleteMode
+							? 'bg-red-800'
+							: 'bg-tbrown-500'} transition-colors material-symbols-rounded"
+						onclick={() => {
+							deleteMode = !deleteMode;
+						}}
+					>
+						delete
+					</button>
+					<button
 						class="p-1 rounded-md text-tbrown-50 bg-tcyan-900 material-symbols-rounded"
 						onclick={() => {
 							pieceCreator.updateBoardSize(6, 6);
@@ -156,7 +172,12 @@
 					</button>
 				</div>
 			</div>
-			<TetraPieceList pieces={problem.pieces} piece_colors_length={problem.piece_colors_length} />
+			<TetraPieceList
+				pieces={problem.pieces}
+				piece_colors_length={problem.piece_colors_length}
+				deleteMode={deleteMode}
+				onDeletePiece={removePieceFromProblem}
+			/>
 		</section>
 	</div>
 	<!-- Problem info & worker controls -->
