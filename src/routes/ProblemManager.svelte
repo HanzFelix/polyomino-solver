@@ -145,6 +145,11 @@
 					<button
 						class="p-1 rounded-md text-tbrown-50 bg-tcyan-900 material-symbols-rounded"
 						onclick={() => {
+							pieceCreator.updateBoardSize(6, 6);
+							addPieceWindow.showModal();
+						}}>add</button
+					>
+					<button
 						class="p-1 rounded-md text-tbrown-50 {deleteMode
 							? 'bg-red-800'
 							: 'bg-tbrown-500'} transition-colors material-symbols-rounded"
@@ -154,11 +159,6 @@
 					>
 						delete
 					</button>
-						onclick={() => {
-							pieceCreator.updateBoardSize(6, 6);
-							addPieceWindow.showModal();
-						}}>add</button
-					>
 					<button
 						class="p-1 rounded-md text-tbrown-50 {pieceweights > 0
 							? 'bg-tcyan-900'

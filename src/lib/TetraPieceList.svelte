@@ -53,13 +53,6 @@
 						? 'text-tbrown-500'
 						: 'text-tbrown-900'}"
 				/>
-				<!--button
-					class="bg-red-500 rounded-br-md"
-					on:click={() => {
-						piece.quantity = 0;
-						tetrapieces.refresh();
-					}}>x</button
-				-->
 			</div>
 		</div>
 	{/each}
