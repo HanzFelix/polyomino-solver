@@ -11,7 +11,7 @@ function tallyPieceWeights(pieces) {
 	const weights = [];
 	for (let i = 0; i < pieces.length; i++) {
 		for (let j = 0; j < pieces[i].quantity; j++) {
-			weights.push({ id: pieces[i].id, weight: pieces[i].weight });
+			weights.push({ id: i+1, weight: pieces[i].weight });
 		}
 	}
 	return weights.sort((a, b) => b.weight - a.weight);
