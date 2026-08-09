@@ -1,7 +1,7 @@
 <script>
 	import TetraRender from '$lib/TetraRender.svelte';
 
-	/** @type {{pieces: any, piece_colors_length: number, deleteMode?: boolean, onDeletePiece?: (piece: any) => void}} */
+	/** @type {{pieces: any, piece_colors_length: number, deleteMode?: boolean, onDeletePiece: (piece_id: number) => void}} */
 	let { pieces, piece_colors_length, deleteMode = false, onDeletePiece } = $props();
 </script>
 
@@ -13,11 +13,9 @@
 			{#if deleteMode}
 				<button
 					type="button"
-					aria-label={`delete piece ${i}`}
-					class="absolute right-1 top-1 z-10 rounded-full bg-red-800 px-2 py-1 text-xs font-black text-tbrown-50"
-					onclick={(event) => {
-						event.stopPropagation();
-						onDeletePiece?.(piece);
+					class="absolute right-1 top-1 z-10 rounded-sm bg-red-800 px-1.5 text-sm text-tbrown-50"
+					onclick={() => {
+						onDeletePiece(piece.id);
 					}}
 				>
 					×
@@ -28,6 +26,7 @@
 				shape={piece.shape}
 				grid={4}
 				title={`piece-${i}`}
+				piece_id={piece.id-1}
 				onclick={() => {
 					piece.quantity++;
 				}}

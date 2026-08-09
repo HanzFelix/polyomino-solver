@@ -8,6 +8,7 @@
 		radius: number;
 		piece_colors_length: number;
 		fill?: boolean;
+		piece_id?: number;
 	}
 
 	let {
@@ -16,6 +17,7 @@
 		shape,
 		piece_colors_length,
 		fill = false,
+		piece_id = 0,
 		...rest
 	}: PolyominoSVGProps = $props();
 	let tetraSVG: SVGElement;
@@ -61,8 +63,8 @@
 				square.style.fill =
 					cell == 'X'
 						? polyominoConfig.colors['X']
-						: polyominoConfig.colors[
-								((Number(cell) - 1) % piece_colors_length) + 1
+						: polyominoConfig.colors[cell &&
+								((piece_id || Number(cell) - 1) % piece_colors_length) + 1
 							]; /*cell != 0 ? shape.color : emptyColor*/ // Set the color
 				shapeGroup.appendChild(square);
 			});
